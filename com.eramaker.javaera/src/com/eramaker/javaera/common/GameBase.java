@@ -1,15 +1,19 @@
 /**
  * GameBase.java written by Mizuki Yuzuhara, 2012
- * GameBase.csvのラッパー<br />
- * 
+ * GameBase.csvのラッパー<br>
+ * staticではないので、使い道に注意
  */
 package com.eramaker.javaera.common;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Mizuki Yuzuhara
- * @version 0.1.20120914
+ * @version 0.0.2.20120915
  */
-public class GameBase {
+public final class GameBase {
 	/**
 	 * ゲームコード<br>
 	 * 別のゲームのセーブデータを誤ってロードしないための識別番号として使用<br>
@@ -45,11 +49,11 @@ public class GameBase {
 	 * 起動時に表示されるゲームの追加情報<br>
 	 * とりあえず何行でも表示できるが、「基本的にシーケンシャル」なので、csvの登録順に注意すること
 	 */
-	private String[] gameComment;
+	private List<String> gameComment;
 	/**
 	 * 主人公以外で、ゲーム開始時からいるキャラクターのキャラクター番号
 	 */
-	private int[] charaInDefault;
+	private List<Integer> charaInDefault;
 	/**
 	 * アイテムなしでも調教ができるようにするフラグ<br>
 	 * 0=false:調教不可<br>
@@ -185,7 +189,7 @@ public class GameBase {
 	 * 
 	 * @return gameComment
 	 */
-	String[] getGameComment() {
+	List<String> getGameComment() {
 		return gameComment;
 	}
 
@@ -195,7 +199,7 @@ public class GameBase {
 	 * @param gameComment
 	 *            gameCommentの設定値
 	 */
-	void setGameComment(String[] gameComment) {
+	void setGameComment(List<String> gameComment) {
 		this.gameComment = gameComment;
 	}
 
@@ -204,7 +208,7 @@ public class GameBase {
 	 * 
 	 * @return charaInDefault
 	 */
-	int[] getCharaInDefault() {
+	List<Integer> getCharaInDefault() {
 		return charaInDefault;
 	}
 
@@ -214,7 +218,7 @@ public class GameBase {
 	 * @param charaInDefault
 	 *            charaInDefaultの設定値
 	 */
-	void setCharaInDefault(int[] charaInDefault) {
+	void setCharaInDefault(List<Integer> charaInDefault) {
 		this.charaInDefault = charaInDefault;
 	}
 
@@ -261,6 +265,22 @@ public class GameBase {
 	 * コンストラクタ
 	 */
 	public GameBase(){
-		
+		// 枠の確保
+		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>();
+		// CSVをばらす
+		try {
+			cells = CSVDecomposer.decompose("csv/gamebase.csv");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		// ばらしたものを振り分ける
+		for (ArrayList<String> columns : cells) {
+			if (columns.get(0).equals("コード")) {
+				setGameCode(Integer.parseInt(columns.get(1)));
+			} else if(columns.get(0).equals("バージョン")) {
+				setGameVersion(Integer.parseInt(columns.get(1)));
+				//todo 続く
+			}
+		}
 	}
 }

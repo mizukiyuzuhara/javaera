@@ -33,8 +33,11 @@ public class CSVDecomposer {
 	 * @param fileName
 	 *            分解するCSVのファイル名
 	 * @return 分解後のCSVリスト（行単位）
+	 * @throws FileNotFoundException
+	 *             ファイルが存在しないとき生成
 	 */
-	public static ArrayList<String> slice(String fileName) {
+	public static ArrayList<String> slice(String fileName)
+			throws FileNotFoundException {
 		// 初期化する
 		ArrayList<String> lines = new ArrayList<String>();
 		FileReader reader = null;
@@ -54,8 +57,6 @@ public class CSVDecomposer {
 					lines.add(string3);
 				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -71,8 +72,11 @@ public class CSVDecomposer {
 	 * @param fileName
 	 *            分解するCSVのファイル名
 	 * @return 分解後のCSVリスト（行及び列）
+	 * @throws FileNotFoundException
+	 *             ファイルが存在しないとき生成
 	 */
-	public static ArrayList<ArrayList<String>> decompose(String fileName) {
+	public static ArrayList<ArrayList<String>> decompose(String fileName)
+			throws FileNotFoundException {
 		// 行にばらしたものを持ってくる
 		ArrayList<String> lines = slice(fileName);
 		// 初期化する
