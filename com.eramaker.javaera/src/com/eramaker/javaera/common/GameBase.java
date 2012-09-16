@@ -64,18 +64,18 @@ public final class GameBase {
 	/**
 	 * バージョン違いによるセーブデータ読み込みの抑止コード<br>
 	 * 「この値＞セーブデータのバージョン番号」かつ「gameVersion＞セーブデータのバージョン番号」のとき、セーブデータは読み込まれない<br>
-	 * なお、デフォルト値はInteger.MAX
+	 * なお、デフォルト値はInteger#MAX_VALUE
 	 */
 	private int allowDifferentVersion;
-	
-	//getter and setter
+
+	// getter and setter
 
 	/**
 	 * gameCodeを取得する
 	 * 
 	 * @return gameCode
 	 */
-	int getGameCode() {
+	public int getGameCode() {
 		return gameCode;
 	}
 
@@ -94,7 +94,7 @@ public final class GameBase {
 	 * 
 	 * @return gameVersion
 	 */
-	int getGameVersion() {
+	public int getGameVersion() {
 		return gameVersion;
 	}
 
@@ -113,7 +113,7 @@ public final class GameBase {
 	 * 
 	 * @return gameSubVersion
 	 */
-	String getGameSubVersion() {
+	public String getGameSubVersion() {
 		return gameSubVersion;
 	}
 
@@ -132,7 +132,7 @@ public final class GameBase {
 	 * 
 	 * @return gameTitle
 	 */
-	String getGameTitle() {
+	public String getGameTitle() {
 		return gameTitle;
 	}
 
@@ -151,7 +151,7 @@ public final class GameBase {
 	 * 
 	 * @return gameAuther
 	 */
-	String getGameAuther() {
+	public String getGameAuther() {
 		return gameAuther;
 	}
 
@@ -170,7 +170,7 @@ public final class GameBase {
 	 * 
 	 * @return gameYear
 	 */
-	String getGameYear() {
+	public String getGameYear() {
 		return gameYear;
 	}
 
@@ -189,18 +189,8 @@ public final class GameBase {
 	 * 
 	 * @return gameComment
 	 */
-	List<String> getGameComment() {
+	public List<String> getGameComment() {
 		return gameComment;
-	}
-
-	/**
-	 * gameCommentを設定する
-	 * 
-	 * @param gameComment
-	 *            gameCommentの設定値
-	 */
-	void setGameComment(List<String> gameComment) {
-		this.gameComment = gameComment;
 	}
 
 	/**
@@ -208,18 +198,8 @@ public final class GameBase {
 	 * 
 	 * @return charaInDefault
 	 */
-	List<Integer> getCharaInDefault() {
+	public List<Integer> getCharaInDefault() {
 		return charaInDefault;
-	}
-
-	/**
-	 * charaInDefaultを設定する
-	 * 
-	 * @param charaInDefault
-	 *            charaInDefaultの設定値
-	 */
-	void setCharaInDefault(List<Integer> charaInDefault) {
-		this.charaInDefault = charaInDefault;
 	}
 
 	/**
@@ -227,7 +207,7 @@ public final class GameBase {
 	 * 
 	 * @return noItem
 	 */
-	boolean isNoItem() {
+	public boolean isNoItem() {
 		return noItem;
 	}
 
@@ -246,7 +226,7 @@ public final class GameBase {
 	 * 
 	 * @return allowDifferentVersion
 	 */
-	int getAllowDifferentVersion() {
+	public int getAllowDifferentVersion() {
 		return allowDifferentVersion;
 	}
 
@@ -259,12 +239,23 @@ public final class GameBase {
 	void setAllowDifferentVersion(int allowDifferentVersion) {
 		this.allowDifferentVersion = allowDifferentVersion;
 	}
-	
+
 	// constructor
 	/**
 	 * コンストラクタ
 	 */
-	public GameBase(){
+	public GameBase() {
+		purseCsvFile();
+	}
+
+	//
+	/**
+	 * CSVファイルから基本的データを取り込む<br>
+	 * プロパティファイルから取り込むこともあり得るので、コンストラクタの処理をこちらで代用する
+	 */
+	private void purseCsvFile() {
+		// allowDifferentVersionはデフォルトが0ではないので、先にデフォ値を設定
+		setAllowDifferentVersion(Integer.MAX_VALUE);
 		// 枠の確保
 		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>();
 		// CSVをばらす
@@ -277,9 +268,29 @@ public final class GameBase {
 		for (ArrayList<String> columns : cells) {
 			if (columns.get(0).equals("コード")) {
 				setGameCode(Integer.parseInt(columns.get(1)));
-			} else if(columns.get(0).equals("バージョン")) {
+			} else if (columns.get(0).equals("バージョン")) {
 				setGameVersion(Integer.parseInt(columns.get(1)));
-				//todo 続く
+			} else if (columns.get(0).equals("サブバージョン")) {
+				setGameSubVersion(columns.get(1));
+			} else if (columns.get(0).equals("タイトル")) {
+				setGameTitle(columns.get(1));
+			} else if (columns.get(0).equals("作者")) {
+				setGameAuther(columns.get(1));
+			} else if (columns.get(0).equals("製作年")) {
+				setGameYear(columns.get(1));
+			} else if (columns.get(0).equals("追加情報")) {
+				gameComment.add(columns.get(1));
+			} else if (columns.get(0).equals("最初からいるキャラ")) {
+				charaInDefault.add(Integer.parseInt(columns.get(1)));
+			} else if (columns.get(0).equals("アイテムなし")) {
+				if (columns.get(1).equals("1")
+						|| Boolean.valueOf(columns.get(1))) {
+					setNoItem(true);
+				} else {
+					setNoItem(false);
+				}
+			} else if (columns.get(0).equals("バージョン違い認める")) {
+				setAllowDifferentVersion(Integer.parseInt(columns.get(1)));
 			}
 		}
 	}

@@ -39,7 +39,7 @@ public class CSVDecomposer {
 	public static ArrayList<String> slice(String fileName)
 			throws FileNotFoundException {
 		// 初期化する
-		ArrayList<String> lines = new ArrayList<String>();
+		ArrayList<String> lines = new ArrayList<String>(0);
 		FileReader reader = null;
 		try {
 			// まずCSVファイルを呼び出す
@@ -62,7 +62,6 @@ public class CSVDecomposer {
 		} finally {
 			IOUtils.closeQuietly(reader);
 		}
-		lines.trimToSize();
 		return lines;
 	}
 
@@ -80,20 +79,18 @@ public class CSVDecomposer {
 		// 行にばらしたものを持ってくる
 		ArrayList<String> lines = slice(fileName);
 		// 初期化する
-		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>(0);
 		for (String string : lines) {
 			// 列ごとにばらす
 			String[] strings = string.split(",");
 			// ばらしたものを配列からリストにキャスト
-			ArrayList<String> rows = new ArrayList<String>();
+			ArrayList<String> rows = new ArrayList<String>(0);
 			for (int i = 0; i < strings.length; i++) {
 				rows.add(strings[i]);
 			}
 			// リストにキャストしたものをcellsに足す
-			rows.trimToSize();
 			cells.add(rows);
 		}
-		cells.trimToSize();
 		return cells;
 	}
 }
