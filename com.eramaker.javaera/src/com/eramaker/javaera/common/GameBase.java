@@ -7,7 +7,6 @@ package com.eramaker.javaera.common;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Mizuki Yuzuhara
@@ -49,11 +48,11 @@ public final class GameBase {
 	 * 起動時に表示されるゲームの追加情報<br>
 	 * とりあえず何行でも表示できるが、「基本的にシーケンシャル」なので、csvの登録順に注意すること
 	 */
-	private List<String> gameComment;
+	private ArrayList<String> gameComment;
 	/**
 	 * 主人公以外で、ゲーム開始時からいるキャラクターのキャラクター番号
 	 */
-	private List<Integer> charaInDefault;
+	private ArrayList<Integer> charaInDefault;
 	/**
 	 * アイテムなしでも調教ができるようにするフラグ<br>
 	 * 0=false:調教不可<br>
@@ -189,7 +188,7 @@ public final class GameBase {
 	 * 
 	 * @return gameComment
 	 */
-	public List<String> getGameComment() {
+	public ArrayList<String> getGameComment() {
 		return gameComment;
 	}
 
@@ -198,7 +197,7 @@ public final class GameBase {
 	 * 
 	 * @return charaInDefault
 	 */
-	public List<Integer> getCharaInDefault() {
+	public ArrayList<Integer> getCharaInDefault() {
 		return charaInDefault;
 	}
 
@@ -245,7 +244,9 @@ public final class GameBase {
 	 * コンストラクタ
 	 */
 	public GameBase() {
-		purseCsvFile();
+		gameComment = new ArrayList<String>(0);
+		charaInDefault = new ArrayList<Integer>(0);
+		purseCSVFile();
 	}
 
 	//
@@ -253,11 +254,11 @@ public final class GameBase {
 	 * CSVファイルから基本的データを取り込む<br>
 	 * プロパティファイルから取り込むこともあり得るので、コンストラクタの処理をこちらで代用する
 	 */
-	private void purseCsvFile() {
+	private void purseCSVFile() {
 		// allowDifferentVersionはデフォルトが0ではないので、先にデフォ値を設定
 		setAllowDifferentVersion(Integer.MAX_VALUE);
 		// 枠の確保
-		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>(0);
 		// CSVをばらす
 		try {
 			cells = CSVDecomposer.decompose("csv/gamebase.csv");
