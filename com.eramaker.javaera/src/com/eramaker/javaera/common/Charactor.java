@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author Mizuki Yuzuhara
  * @version 0.1.20120916
  */
 public class Charactor {
+
 	/**
 	 * キャラ番号<br>
 	 * <b>キャラ登録番号ではない</b>
@@ -38,25 +41,25 @@ public class Charactor {
 	/**
 	 * キャラの基礎パラメータ
 	 */
-	private TreeMap<Integer,Integer> base;
+	private TreeMap<Integer, Integer> base;
 	/**
 	 * キャラの基礎パラメータの最大値
 	 */
-	private TreeMap<Integer,Integer> maxBase;
+	private TreeMap<Integer, Integer> maxBase;
 	/**
 	 * キャラの能力<br>
 	 * 元は単配列だったのだが、配列の場合能力の最大値まで枠を作らなければならないので、Setにしている<br>
 	 * そのため、<b>「0か1かしか受け付けない」＝あるかないか</b>に仕様変更しているので、それ以外のものを突っ込まないよう注意すること
 	 */
-	private TreeSet<Integer> ability;
+	private TreeMap<Integer, Integer> ability;
 	/**
-	 * キャラの素質<br>
-	 * 元は単配列だったのだが、配列の場合能力の最大値まで枠を作らなければならないので、Setにしている<br>
-	 * そのため、<b>「0か1かしか受け付けない」＝あるかないか</b>に仕様変更しているので、それ以外のものを突っ込まないよう注意すること
+	 * キャラの素質
 	 */
 	private TreeSet<Integer> talent;
 	/**
-	 * キャラの経験
+	 * キャラの経験<br>
+	 * 元は単配列だったのだが、配列の場合能力の最大値まで枠を作らなければならないので、Setにしている<br>
+	 * そのため、<b>「0か1かしか受け付けない」＝あるかないか</b>に仕様変更しているので、それ以外のものを突っ込まないよう注意すること
 	 */
 	private TreeMap<Integer, Integer> exp;
 	/**
@@ -117,11 +120,11 @@ public class Charactor {
 	 */
 	private TreeMap<Integer, Integer> jewelOnTrain;
 	/**
-	 * 「key」が「value」をどう呼ぶか<br>
+	 * 「key」が「このキャラ」をどう呼ぶか<br>
 	 * 「key」はキャラ番号<br>
 	 * たぶん口上システムを使わない限り使われない
 	 */
-	private TreeMap<Integer, String> secondPerson;
+	private TreeMap<Integer, String> appellation;
 
 	// getter and setter
 
@@ -235,7 +238,7 @@ public class Charactor {
 	 * @param base
 	 *            baseの設定値
 	 */
-	public void setBase(TreeMap<Integer,Integer> base) {
+	public void setBase(TreeMap<Integer, Integer> base) {
 		this.base = base;
 	}
 
@@ -244,7 +247,7 @@ public class Charactor {
 	 * 
 	 * @return maxBase
 	 */
-	public TreeMap<Integer,Integer> getMaxBase() {
+	public TreeMap<Integer, Integer> getMaxBase() {
 		return maxBase;
 	}
 
@@ -254,7 +257,7 @@ public class Charactor {
 	 * @param maxBase
 	 *            maxBaseの設定値
 	 */
-	public void setMaxBase(TreeMap<Integer,Integer> maxBase) {
+	public void setMaxBase(TreeMap<Integer, Integer> maxBase) {
 		this.maxBase = maxBase;
 	}
 
@@ -263,7 +266,7 @@ public class Charactor {
 	 * 
 	 * @return ability
 	 */
-	public TreeSet<Integer> getAbility() {
+	public TreeMap<Integer, Integer> getAbility() {
 		return ability;
 	}
 
@@ -273,7 +276,7 @@ public class Charactor {
 	 * @param ability
 	 *            abilityの設定値
 	 */
-	public void setAbility(TreeSet<Integer> ability) {
+	public void setAbility(TreeMap<Integer, Integer> ability) {
 		this.ability = ability;
 	}
 
@@ -544,22 +547,22 @@ public class Charactor {
 	}
 
 	/**
-	 * secondPersonを取得する
+	 * appellationを取得する
 	 * 
-	 * @return secondPerson
+	 * @return appellation
 	 */
-	public TreeMap<Integer, String> getSecondPerson() {
-		return secondPerson;
+	public TreeMap<Integer, String> getappellation() {
+		return appellation;
 	}
 
 	/**
-	 * secondPersonを設定する
+	 * appellationを設定する
 	 * 
-	 * @param secondPerson
-	 *            secondPersonの設定値
+	 * @param appellation
+	 *            appellationの設定値
 	 */
-	public void setSecondPerson(TreeMap<Integer, String> secondPerson) {
-		this.secondPerson = secondPerson;
+	public void setappellation(TreeMap<Integer, String> appellation) {
+		this.appellation = appellation;
 	}
 
 	// constructor
@@ -572,24 +575,100 @@ public class Charactor {
 		super();
 	}
 
-	public Charactor(String fileName) {
-		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>(0);
+	private Charactor(String fileName) {
 		try {
-			cells = CSVDecomposer.decompose(fileName);
+			ArrayList<ArrayList<String>> cells = CSVDecomposer
+					.decompose(fileName);
+			try {
+				for (ArrayList<String> lines : cells) {
+					if (lines.get(0).equals("番号")) {
+						setId(Integer.parseInt(lines.get(1)));
+					} else if (lines.get(0).equals("名前")) {
+						setName(lines.get(1));
+					} else if (lines.get(0).equals("呼び名")) {
+						setCallName(lines.get(1));
+					} else if (lines.get(0).equals("基礎")) {
+						base.put(Integer.parseInt(lines.get(1)),
+								Integer.parseInt(lines.get(2)));
+						maxBase.put(Integer.parseInt(lines.get(1)),
+								Integer.parseInt(lines.get(2)));
+					} else if (lines.get(0).equals("能力")) {
+						if (StringUtils.isNumeric(lines.get(1))) {
+							ability.put(Integer.parseInt(lines.get(1)),
+									Integer.parseInt(lines.get(2)));
+						} else {
+							try {
+								ability.put(GameDictionaries.abilities
+										.getKey(lines.get(1)), Integer
+										.parseInt(lines.get(2)));
+							} catch (ElementsNotFoundException e) {
+								e.printStackTrace();
+							}
+						}
+					} else if (lines.get(0).equals("素質")) {
+						if (StringUtils.isNumeric(lines.get(1))) {
+							talent.add(Integer.parseInt(lines.get(1)));
+						} else {
+							try {
+								talent.add(GameDictionaries.talents
+										.getKey(lines.get(1)));
+							} catch (ElementsNotFoundException e) {
+								e.printStackTrace();
+							}
+						}
+					} else if (lines.get(0).equals("経験")) {
+						if (StringUtils.isNumeric(lines.get(1))) {
+							exp.put(Integer.parseInt(lines.get(1)),
+									Integer.parseInt(lines.get(2)));
+						} else {
+							try {
+								exp.put(GameDictionaries.exps.getKey(lines
+										.get(1)),
+										Integer.parseInt(lines.get(2)));
+							} catch (ElementsNotFoundException e) {
+								e.printStackTrace();
+							}
+						}
+					} else if (lines.get(0).equals("相性")) {
+						relation.put(Integer.parseInt(lines.get(1)),
+								Integer.parseInt(lines.get(2)));
+					} else if (lines.get(0).equals("助手")) {
+						switch (Integer.parseInt(lines.get(1))) {
+						case 1:
+							setAssistable(true);
+							break;
+
+						default:
+							setAssistable(false);
+							break;
+						}
+					} else if (lines.get(0).equals("フラグ")) {
+						flag.put(Integer.parseInt(lines.get(1)),
+								Integer.parseInt(lines.get(2)));
+					} else if (lines.get(0).equals("呼称")) {
+						appellation.put(Integer.parseInt(lines.get(1)),
+								lines.get(2));
+					}
+				}
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		for (ArrayList<String> lines : cells) {
-			if (lines.get(0).equals("番号")) {
-				setId(Integer.parseInt(lines.get(1)));
-			} else if (lines.get(0).equals("名前")) {
-				setName(lines.get(1));
-			} else if (lines.get(0).equals("呼び名")) {
-				setCallName(lines.get(1));
-			} else if (lines.get(0).equals("基礎")) {
-				base.put(Integer.parseInt(lines.get(1)), Integer.parseInt(lines.get(2)));
-				maxBase.put(Integer.parseInt(lines.get(1)), Integer.parseInt(lines.get(2)));
-			}
-		}
 	}
+
+	// other functions
+
+	/**
+	 * キャラデータを作成して返す
+	 * 
+	 * @param fileName
+	 *            キャラデータの元となるCSVのファイル名
+	 * @return 展開したキャラデータ
+	 */
+	public static Charactor createCharactor(String fileName) {
+		return new Charactor(fileName);
+	}
+
 }

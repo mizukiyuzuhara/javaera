@@ -257,42 +257,41 @@ public final class GameBase {
 	private void purseCSVFile() {
 		// allowDifferentVersionはデフォルトが0ではないので、先にデフォ値を設定
 		setAllowDifferentVersion(Integer.MAX_VALUE);
-		// 枠の確保
-		ArrayList<ArrayList<String>> cells = new ArrayList<ArrayList<String>>(0);
 		// CSVをばらす
 		try {
-			cells = CSVDecomposer.decompose("csv/gamebase.csv");
+			ArrayList<ArrayList<String>> cells = CSVDecomposer
+					.decompose("csv/gamebase.csv");
+			// ばらしたものを振り分ける
+			for (ArrayList<String> columns : cells) {
+				if (columns.get(0).equals("コード")) {
+					setGameCode(Integer.parseInt(columns.get(1)));
+				} else if (columns.get(0).equals("バージョン")) {
+					setGameVersion(Integer.parseInt(columns.get(1)));
+				} else if (columns.get(0).equals("サブバージョン")) {
+					setGameSubVersion(columns.get(1));
+				} else if (columns.get(0).equals("タイトル")) {
+					setGameTitle(columns.get(1));
+				} else if (columns.get(0).equals("作者")) {
+					setGameAuther(columns.get(1));
+				} else if (columns.get(0).equals("製作年")) {
+					setGameYear(columns.get(1));
+				} else if (columns.get(0).equals("追加情報")) {
+					gameComment.add(columns.get(1));
+				} else if (columns.get(0).equals("最初からいるキャラ")) {
+					charaInDefault.add(Integer.parseInt(columns.get(1)));
+				} else if (columns.get(0).equals("アイテムなし")) {
+					if (columns.get(1).equals("1")
+							|| Boolean.valueOf(columns.get(1))) {
+						setNoItem(true);
+					} else {
+						setNoItem(false);
+					}
+				} else if (columns.get(0).equals("バージョン違い認める")) {
+					setAllowDifferentVersion(Integer.parseInt(columns.get(1)));
+				}
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		// ばらしたものを振り分ける
-		for (ArrayList<String> columns : cells) {
-			if (columns.get(0).equals("コード")) {
-				setGameCode(Integer.parseInt(columns.get(1)));
-			} else if (columns.get(0).equals("バージョン")) {
-				setGameVersion(Integer.parseInt(columns.get(1)));
-			} else if (columns.get(0).equals("サブバージョン")) {
-				setGameSubVersion(columns.get(1));
-			} else if (columns.get(0).equals("タイトル")) {
-				setGameTitle(columns.get(1));
-			} else if (columns.get(0).equals("作者")) {
-				setGameAuther(columns.get(1));
-			} else if (columns.get(0).equals("製作年")) {
-				setGameYear(columns.get(1));
-			} else if (columns.get(0).equals("追加情報")) {
-				gameComment.add(columns.get(1));
-			} else if (columns.get(0).equals("最初からいるキャラ")) {
-				charaInDefault.add(Integer.parseInt(columns.get(1)));
-			} else if (columns.get(0).equals("アイテムなし")) {
-				if (columns.get(1).equals("1")
-						|| Boolean.valueOf(columns.get(1))) {
-					setNoItem(true);
-				} else {
-					setNoItem(false);
-				}
-			} else if (columns.get(0).equals("バージョン違い認める")) {
-				setAllowDifferentVersion(Integer.parseInt(columns.get(1)));
-			}
 		}
 	}
 }
