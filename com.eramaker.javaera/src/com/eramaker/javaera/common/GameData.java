@@ -562,7 +562,7 @@ public class GameData {
 	 *            項番
 	 * @return 主人公
 	 */
-	public Integer getMaster(int index) {
+	public static Integer getMaster(int index) {
 		return masters.get(index);
 	}
 
