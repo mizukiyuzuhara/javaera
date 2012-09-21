@@ -40,14 +40,9 @@ public class GameDictionaries {
 	 */
 	public static Dictionary trainings;
 	/**
-	 * アイテムの辞書<br>
-	 * 価格表は別に持つ
+	 * アイテムの辞書.
 	 */
-	public static Dictionary items;
-	/**
-	 * アイテムの価格表
-	 */
-	public static TreeMap<Integer, Integer> prices;
+	public static TreeMap<Integer, GameItem> items;
 	/**
 	 * ゲーム中で使う色々な文章の辞書<br>
 	 * あまり使っていないような気もするが、そこはそれ
@@ -207,40 +202,18 @@ public class GameDictionaries {
 
 	/**
 	 * itemsを取得する
-	 * 
 	 * @return items
 	 */
-	public static Dictionary getItems() {
+	public static TreeMap<Integer, GameItem> getItems() {
 		return items;
 	}
 
 	/**
 	 * itemsを設定する
-	 * 
-	 * @param items
-	 *            itemsの設定値
+	 * @param items itemsの設定値
 	 */
-	public static void setItems(Dictionary items) {
+	public static void setItems(TreeMap<Integer, GameItem> items) {
 		GameDictionaries.items = items;
-	}
-
-	/**
-	 * pricesを取得する
-	 * 
-	 * @return prices
-	 */
-	public static TreeMap<Integer, Integer> getPrices() {
-		return prices;
-	}
-
-	/**
-	 * pricesを設定する
-	 * 
-	 * @param prices
-	 *            pricesの設定値
-	 */
-	public static void setPrices(TreeMap<Integer, Integer> prices) {
-		GameDictionaries.prices = prices;
 	}
 
 	/**
@@ -274,23 +247,22 @@ public class GameDictionaries {
 		marks.createDictionary(FILENAME_MARK);
 		exps.createDictionary(FILENAME_EXP);
 		trainings.createDictionary(FILENAME_TRAIN);
-		items.createDictionary(FILENAME_ITEM);
-		initializePrize();
 		stringses.createDictionary(FILENAME_STR);
+		initializeItems();
 	}
 
 	/**
-	 * 価格表を初期化する
+	 * アイテムを初期化する
 	 */
-	public static void initializePrize() {
-		prices.clear();
+	public static void initializeItems() {
+		items.clear();
 		try {
 			ArrayList<ArrayList<String>> cells = CSVDecomposer
 					.decompose(FILENAME_ITEM);
 			for (ArrayList<String> lines : cells) {
 				try {
-					prices.put(Integer.parseInt(lines.get(0)),
-							Integer.parseInt(lines.get(2)));
+					GameItem item = new GameItem(Integer.parseInt(lines.get(0)), lines.get(1), Integer.parseInt(lines.get(2)));
+					items.put(item.getId(), item);
 				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				}

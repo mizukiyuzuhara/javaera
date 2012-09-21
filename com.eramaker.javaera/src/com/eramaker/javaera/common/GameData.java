@@ -1,5 +1,5 @@
 /**
- * GameData.java written by Mizuki Yuzuhara, 2012
+ * this.java written by Mizuki Yuzuhara, 2012
  * eramakerのゲームデータを管理するクラス<br />
  * すべてセーブされるので扱いには注意すること<br />
  * 特に、無駄な配列は作らないこと<br>
@@ -7,6 +7,7 @@
  */
 package com.eramaker.javaera.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -14,88 +15,94 @@ import java.util.TreeMap;
  * @author Mizuki Yuzuhara
  * @version 0.1.20120914
  */
-public class GameData {
+public class GameData implements Serializable {
+
+	/**
+	 * シリアライズバージョン
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * ゲームコード<br>
 	 * 別のゲームのセーブデータを誤ってロードしないための識別番号として使用<br>
 	 * 32bit整数の範囲内で任意の数を指定してよいが、重複しないよう注意すること
 	 */
-	private static int gameCode;
+	private int gameCode;
 	/**
 	 * ゲームのバージョン<br>
 	 * このバージョンがセーブデータに記録され、バージョン違いでのデータ読み込みを制御する<br>
-	 * なお、表示上は「このバージョンを1000で割った数」
+	 * なお、表示上は「このバージョンを100で割った数」
 	 */
-	private static int gameVersion;
+	private int gameVersion;
 	/**
 	 * ゲームのバージョンのうち、パッチ当てによるバージョン違いを識別するもの<br>
 	 * すなわち、「ver0.01a」の「a」の部分<br>
 	 * セーブデータに影響が出るような変更でない限り、この番号を上げること
 	 */
+	private String gameSubVersion;
 	/**
 	 * 日付を制御する<br>
 	 * 曜日を求める必要があるときは、これの#get(0)を7で割って余りを曜日に当てはめると早いかも<br>
 	 * コレクション化しているので、カレンダー制御することも可能、だと思う
 	 */
-	private static ArrayList<Integer> days;
+	private ArrayList<Integer> days;
 	/**
 	 * 時間を制御する<br>
 	 * 意味があるかどうかはわからないが、一応コレクション化
 	 */
-	private static ArrayList<Integer> times;
+	private ArrayList<Integer> times;
 	/**
 	 * 資金を制御する
 	 */
-	private static ArrayList<Integer> moneys;
+	private ArrayList<Integer> moneys;
 	/**
 	 * 主人公のキャラの<b>登録番号</b>を制御する<br>
 	 * 通常1人しかいないとは思うが、一応コレクション化
 	 */
-	private static ArrayList<Integer> masters;
+	private ArrayList<Integer> masters;
 	/**
 	 * 調教中のキャラの<b>登録番号</b>を制御する<br>
 	 * 通常1人だろうが、3P、4P、…をやりたいときのことを考えて、コレクション化
 	 */
-	private static ArrayList<Integer> targets;
+	private ArrayList<Integer> targets;
 	/**
 	 * 助手のキャラの<b>登録番号</b>を制御する<br>
 	 * 通常1人だろうが、（ｒｙコレクション化
 	 */
-	private static ArrayList<Integer> assistants;
+	private ArrayList<Integer> assistants;
 	/**
 	 * 調教している人間のキャラの<b>登録番号</b>を制御する<br>
 	 * 正直誰得なのだが、コレクション化しておく
 	 */
-	private static ArrayList<Integer> pleyers;
+	private ArrayList<Integer> pleyers;
 	/**
 	 * キャラの<b>登録番号そのものを</b>を制御する<br>
 	 * このArrayListは<b>#get(0)を返す関数を持たない</b>ので注意
 	 */
-	private static ArrayList<Integer> registeredCharactors;
+	private ArrayList<Integer> registeredCharactors;
 	/**
 	 * <b>キャラそのものを</b>制御する<br>
 	 * Charactor型を持つので、<b>デフォルトを維持する必要はない</b>し、<b>想定もしていない</b><br>
 	 * これも<b>#get(0)を返す関数を持たない</b>
 	 */
-	private static TreeMap<Integer, Charactor> charactors;
+	private TreeMap<Integer, Charactor> charactors;
 	/**
 	 * 購入可能なキャラを制御する<br>
 	 * eramakerではアイテムの売買で制御しているっぽいが、敢えて分けている
 	 */
-	private static ArrayList<Integer> charactorInShop;
+	private ArrayList<Integer> charactorInShop;
 	/**
 	 * 所持アイテムを制御する<br>
 	 * 消耗アイテムもあるので、「あるなし」の制御をしないこと
 	 */
-	private static TreeMap<Integer, Integer> items;
+	private TreeMap<Integer, Integer> items;
 	/**
 	 * 購入可能なアイテムを制御する
 	 */
-	private static ArrayList<Integer> itemInShop;
+	private ArrayList<Integer> itemInShop;
 	/**
 	 * フラグを制御する
 	 */
-	private static TreeMap<Integer, Integer> flag;
+	private TreeMap<Integer, Integer> flag;
 
 	// getter and setter
 
@@ -104,17 +111,8 @@ public class GameData {
 	 * 
 	 * @return gameCode
 	 */
-	public static int getGameCode() {
+	public int getGameCode() {
 		return gameCode;
-	}
-
-	/**
-	 * gameVersionを取得する
-	 * 
-	 * @return gameVersion
-	 */
-	public static int getGameVersion() {
-		return gameVersion;
 	}
 
 	/**
@@ -123,8 +121,17 @@ public class GameData {
 	 * @param gameVersion
 	 *            gameVersionの設定値
 	 */
-	public static void setGameVersion(int gameVersion) {
-		GameData.gameVersion = gameVersion;
+	public void setGameVersion(int gameVersion) {
+		this.gameVersion = gameVersion;
+	}
+
+	/**
+	 * gameVersionを取得する
+	 * 
+	 * @return gameVersion
+	 */
+	public int getGameVersion() {
+		return gameVersion;
 	}
 
 	/**
@@ -133,8 +140,27 @@ public class GameData {
 	 * @param gameCode
 	 *            gameCodeの設定値
 	 */
-	public static void setGameCode(int gameCode) {
-		GameData.gameCode = gameCode;
+	public void setGameCode(int gameCode) {
+		this.gameCode = gameCode;
+	}
+
+	/**
+	 * gameSubVersionを取得する
+	 * 
+	 * @return gameSubVersion
+	 */
+	public String getGameSubVersion() {
+		return gameSubVersion;
+	}
+
+	/**
+	 * gameSubVersionを設定する
+	 * 
+	 * @param gameSubVersion
+	 *            gameSubVersionの設定値
+	 */
+	public void setGameSubVersion(String gameSubVersion) {
+		this.gameSubVersion = gameSubVersion;
 	}
 
 	/**
@@ -142,7 +168,7 @@ public class GameData {
 	 * 
 	 * @return days
 	 */
-	public static ArrayList<Integer> getDays() {
+	public ArrayList<Integer> getDays() {
 		return days;
 	}
 
@@ -152,8 +178,8 @@ public class GameData {
 	 * @param days
 	 *            daysの設定値
 	 */
-	public static void setDays(ArrayList<Integer> days) {
-		GameData.days = days;
+	public void setDays(ArrayList<Integer> days) {
+		this.days = days;
 	}
 
 	/**
@@ -161,7 +187,7 @@ public class GameData {
 	 * 
 	 * @return times
 	 */
-	public static ArrayList<Integer> getTimes() {
+	public ArrayList<Integer> getTimes() {
 		return times;
 	}
 
@@ -171,8 +197,8 @@ public class GameData {
 	 * @param times
 	 *            timesの設定値
 	 */
-	public static void setTimes(ArrayList<Integer> times) {
-		GameData.times = times;
+	public void setTimes(ArrayList<Integer> times) {
+		this.times = times;
 	}
 
 	/**
@@ -180,7 +206,7 @@ public class GameData {
 	 * 
 	 * @return moneys
 	 */
-	public static ArrayList<Integer> getMoneys() {
+	public ArrayList<Integer> getMoneys() {
 		return moneys;
 	}
 
@@ -190,8 +216,8 @@ public class GameData {
 	 * @param moneys
 	 *            moneysの設定値
 	 */
-	public static void setMoneys(ArrayList<Integer> moneys) {
-		GameData.moneys = moneys;
+	public void setMoneys(ArrayList<Integer> moneys) {
+		this.moneys = moneys;
 	}
 
 	/**
@@ -199,7 +225,7 @@ public class GameData {
 	 * 
 	 * @return masters
 	 */
-	public static ArrayList<Integer> getMasters() {
+	public ArrayList<Integer> getMasters() {
 		return masters;
 	}
 
@@ -209,8 +235,8 @@ public class GameData {
 	 * @param masters
 	 *            mastersの設定値
 	 */
-	public static void setMasters(ArrayList<Integer> masters) {
-		GameData.masters = masters;
+	public void setMasters(ArrayList<Integer> masters) {
+		this.masters = masters;
 	}
 
 	/**
@@ -218,7 +244,7 @@ public class GameData {
 	 * 
 	 * @return targets
 	 */
-	public static ArrayList<Integer> getTargets() {
+	public ArrayList<Integer> getTargets() {
 		return targets;
 	}
 
@@ -228,8 +254,8 @@ public class GameData {
 	 * @param targets
 	 *            targetsの設定値
 	 */
-	public static void setTargets(ArrayList<Integer> targets) {
-		GameData.targets = targets;
+	public void setTargets(ArrayList<Integer> targets) {
+		this.targets = targets;
 	}
 
 	/**
@@ -237,7 +263,7 @@ public class GameData {
 	 * 
 	 * @return assistants
 	 */
-	public static ArrayList<Integer> getAssistants() {
+	public ArrayList<Integer> getAssistants() {
 		return assistants;
 	}
 
@@ -247,8 +273,8 @@ public class GameData {
 	 * @param assistants
 	 *            assistantsの設定値
 	 */
-	public static void setAssistants(ArrayList<Integer> assistants) {
-		GameData.assistants = assistants;
+	public void setAssistants(ArrayList<Integer> assistants) {
+		this.assistants = assistants;
 	}
 
 	/**
@@ -256,7 +282,7 @@ public class GameData {
 	 * 
 	 * @return pleyers
 	 */
-	public static ArrayList<Integer> getPleyers() {
+	public ArrayList<Integer> getPleyers() {
 		return pleyers;
 	}
 
@@ -266,8 +292,8 @@ public class GameData {
 	 * @param pleyers
 	 *            pleyersの設定値
 	 */
-	public static void setPleyers(ArrayList<Integer> pleyers) {
-		GameData.pleyers = pleyers;
+	public void setPleyers(ArrayList<Integer> pleyers) {
+		this.pleyers = pleyers;
 	}
 
 	/**
@@ -275,7 +301,7 @@ public class GameData {
 	 * 
 	 * @return registeredCharactors
 	 */
-	public static ArrayList<Integer> getRegisteredCharactors() {
+	public ArrayList<Integer> getRegisteredCharactors() {
 		return registeredCharactors;
 	}
 
@@ -285,9 +311,8 @@ public class GameData {
 	 * @param registeredCharactors
 	 *            registeredCharactorsの設定値
 	 */
-	public static void setRegisteredCharactors(
-			ArrayList<Integer> registeredCharactors) {
-		GameData.registeredCharactors = registeredCharactors;
+	public void setRegisteredCharactors(ArrayList<Integer> registeredCharactors) {
+		this.registeredCharactors = registeredCharactors;
 	}
 
 	/**
@@ -295,7 +320,7 @@ public class GameData {
 	 * 
 	 * @return charactors
 	 */
-	public static TreeMap<Integer, Charactor> getCharactors() {
+	public TreeMap<Integer, Charactor> getCharactors() {
 		return charactors;
 	}
 
@@ -305,8 +330,8 @@ public class GameData {
 	 * @param charactors
 	 *            charactorsの設定値
 	 */
-	public static void setCharactors(TreeMap<Integer, Charactor> charactors) {
-		GameData.charactors = charactors;
+	public void setCharactors(TreeMap<Integer, Charactor> charactors) {
+		this.charactors = charactors;
 	}
 
 	/**
@@ -314,7 +339,7 @@ public class GameData {
 	 * 
 	 * @return charactorInShop
 	 */
-	public static ArrayList<Integer> getCharactorInShop() {
+	public ArrayList<Integer> getCharactorInShop() {
 		return charactorInShop;
 	}
 
@@ -324,8 +349,8 @@ public class GameData {
 	 * @param charactorInShop
 	 *            charactorInShopの設定値
 	 */
-	public static void setCharactorInShop(ArrayList<Integer> charactorInShop) {
-		GameData.charactorInShop = charactorInShop;
+	public void setCharactorInShop(ArrayList<Integer> charactorInShop) {
+		this.charactorInShop = charactorInShop;
 	}
 
 	/**
@@ -333,7 +358,7 @@ public class GameData {
 	 * 
 	 * @return items
 	 */
-	public static TreeMap<Integer, Integer> getItems() {
+	public TreeMap<Integer, Integer> getItems() {
 		return items;
 	}
 
@@ -343,8 +368,8 @@ public class GameData {
 	 * @param items
 	 *            itemsの設定値
 	 */
-	public static void setItems(TreeMap<Integer, Integer> items) {
-		GameData.items = items;
+	public void setItems(TreeMap<Integer, Integer> items) {
+		this.items = items;
 	}
 
 	/**
@@ -352,7 +377,7 @@ public class GameData {
 	 * 
 	 * @return itemInShop
 	 */
-	public static ArrayList<Integer> getItemInShop() {
+	public ArrayList<Integer> getItemInShop() {
 		return itemInShop;
 	}
 
@@ -362,8 +387,8 @@ public class GameData {
 	 * @param itemInShop
 	 *            itemInShopの設定値
 	 */
-	public static void setItemInShop(ArrayList<Integer> itemInShop) {
-		GameData.itemInShop = itemInShop;
+	public void setItemInShop(ArrayList<Integer> itemInShop) {
+		this.itemInShop = itemInShop;
 	}
 
 	/**
@@ -371,7 +396,7 @@ public class GameData {
 	 * 
 	 * @return flag
 	 */
-	public static TreeMap<Integer, Integer> getFlag() {
+	public TreeMap<Integer, Integer> getFlag() {
 		return flag;
 	}
 
@@ -381,8 +406,8 @@ public class GameData {
 	 * @param flag
 	 *            flagの設定値
 	 */
-	public static void setFlag(TreeMap<Integer, Integer> flag) {
-		GameData.flag = flag;
+	public void setFlag(TreeMap<Integer, Integer> flag) {
+		this.flag = flag;
 	}
 
 	// other functions
@@ -392,7 +417,7 @@ public class GameData {
 	 * @param day
 	 *            日付（days#get(0)）
 	 */
-	public static void setDay(Integer day) {
+	public void setDay(Integer day) {
 		setDay(0, day);
 	}
 
@@ -404,7 +429,7 @@ public class GameData {
 	 * @param day
 	 *            日付
 	 */
-	public static void setDay(int index, Integer day) {
+	public void setDay(int index, Integer day) {
 		days.set(index, day);
 	}
 
@@ -413,7 +438,7 @@ public class GameData {
 	 * 
 	 * @return 日付（days#get(0)）
 	 */
-	public static Integer getDay() {
+	public Integer getDay() {
 		return getDay(0);
 	}
 
@@ -424,7 +449,7 @@ public class GameData {
 	 *            項番
 	 * @return 日付
 	 */
-	public static Integer getDay(Integer index) {
+	public Integer getDay(Integer index) {
 		return days.get(index);
 	}
 
@@ -434,7 +459,7 @@ public class GameData {
 	 * @param time
 	 *            時間（times#get(0)）
 	 */
-	public static void setTime(Integer time) {
+	public void setTime(Integer time) {
 		setTime(0, time);
 	}
 
@@ -446,7 +471,7 @@ public class GameData {
 	 * @param time
 	 *            時間
 	 */
-	public static void setTime(int index, Integer time) {
+	public void setTime(int index, Integer time) {
 		times.set(index, time);
 	}
 
@@ -455,7 +480,7 @@ public class GameData {
 	 * 
 	 * @return 時間（times#get(0)）
 	 */
-	public static Integer getTime() {
+	public Integer getTime() {
 		return getTime(0);
 	}
 
@@ -466,7 +491,7 @@ public class GameData {
 	 *            項番
 	 * @return 時間
 	 */
-	public static Integer getTime(int index) {
+	public Integer getTime(int index) {
 		return times.get(index);
 	}
 
@@ -475,7 +500,7 @@ public class GameData {
 	 * 
 	 * @param money
 	 */
-	public static void setMoney(Integer money) {
+	public void setMoney(Integer money) {
 		setMoney(0, money);
 	}
 
@@ -487,7 +512,7 @@ public class GameData {
 	 * @param money
 	 *            所持金
 	 */
-	public static void setMoney(int index, Integer money) {
+	public void setMoney(int index, Integer money) {
 		moneys.set(index, money);
 	}
 
@@ -496,7 +521,7 @@ public class GameData {
 	 * 
 	 * @return 所持金
 	 */
-	public static Integer getMoney() {
+	public Integer getMoney() {
 		return getMoney(0);
 	}
 
@@ -507,7 +532,7 @@ public class GameData {
 	 *            項番
 	 * @return 所持金
 	 */
-	public static Integer getMoney(int index) {
+	public Integer getMoney(int index) {
 		return moneys.get(index);
 	}
 
@@ -516,7 +541,7 @@ public class GameData {
 	 * 
 	 * @return 所持金の総合計
 	 */
-	public static Integer getTotalMoney() {
+	public Integer getTotalMoney() {
 		int total = 0;
 		for (Integer money : moneys) {
 			total = total + money;
@@ -530,7 +555,7 @@ public class GameData {
 	 * @param master
 	 *            主人公（master#get(0)）
 	 */
-	public static void setMaster(Integer master) {
+	public void setMaster(Integer master) {
 		setMaster(0, master);
 	}
 
@@ -542,7 +567,7 @@ public class GameData {
 	 * @param master
 	 *            主人公
 	 */
-	public static void setMaster(int index, Integer master) {
+	public void setMaster(int index, Integer master) {
 		masters.set(index, master);
 	}
 
@@ -551,7 +576,7 @@ public class GameData {
 	 * 
 	 * @return 主人公
 	 */
-	public static Integer getMaster() {
+	public Integer getMaster() {
 		return getMaster(0);
 	}
 
@@ -562,7 +587,7 @@ public class GameData {
 	 *            項番
 	 * @return 主人公
 	 */
-	public static Integer getMaster(int index) {
+	public Integer getMaster(int index) {
 		return masters.get(index);
 	}
 
@@ -572,7 +597,7 @@ public class GameData {
 	 * @param target
 	 *            調教中のキャラ
 	 */
-	public static void setTarget(Integer target) {
+	public void setTarget(Integer target) {
 		setTarget(0, target);
 	}
 
@@ -584,7 +609,7 @@ public class GameData {
 	 * @param target
 	 *            調教中のキャラ
 	 */
-	public static void setTarget(int index, Integer target) {
+	public void setTarget(int index, Integer target) {
 		targets.set(index, target);
 	}
 
@@ -593,7 +618,7 @@ public class GameData {
 	 * 
 	 * @return 調教中のキャラ
 	 */
-	public static Integer getTarget() {
+	public Integer getTarget() {
 		return getTarget(0);
 	}
 
@@ -604,7 +629,7 @@ public class GameData {
 	 *            項番
 	 * @return 調教中のキャラ
 	 */
-	public static Integer getTarget(int index) {
+	public Integer getTarget(int index) {
 		return targets.get(index);
 	}
 
@@ -614,7 +639,7 @@ public class GameData {
 	 * @param assistant
 	 *            助手
 	 */
-	public static void setAssistant(Integer assistant) {
+	public void setAssistant(Integer assistant) {
 		setAssistant(0, assistant);
 	}
 
@@ -626,7 +651,7 @@ public class GameData {
 	 * @param assistant
 	 *            助手
 	 */
-	public static void setAssistant(int index, Integer assistant) {
+	public void setAssistant(int index, Integer assistant) {
 		assistants.set(index, assistant);
 	}
 
@@ -635,7 +660,7 @@ public class GameData {
 	 * 
 	 * @return 助手
 	 */
-	public static Integer getAssistant() {
+	public Integer getAssistant() {
 		return getAssistant(0);
 	}
 
@@ -646,7 +671,7 @@ public class GameData {
 	 *            項番
 	 * @return 助手
 	 */
-	public static Integer getAssistant(int index) {
+	public Integer getAssistant(int index) {
 		return assistants.get(index);
 	}
 
@@ -656,7 +681,7 @@ public class GameData {
 	 * @param player
 	 *            調教している人間
 	 */
-	public static void setPleyer(Integer player) {
+	public void setPleyer(Integer player) {
 		setPleyer(0, player);
 	}
 
@@ -668,7 +693,7 @@ public class GameData {
 	 * @param player
 	 *            調教している人間
 	 */
-	public static void setPleyer(int index, Integer player) {
+	public void setPleyer(int index, Integer player) {
 		pleyers.set(index, player);
 	}
 
@@ -677,7 +702,7 @@ public class GameData {
 	 * 
 	 * @return 調教している人間
 	 */
-	public static Integer getPleyer() {
+	public Integer getPleyer() {
 		return getPleyer(0);
 	}
 
@@ -688,7 +713,7 @@ public class GameData {
 	 *            項番
 	 * @return 調教している人間
 	 */
-	public static Integer getPleyer(int index) {
+	public Integer getPleyer(int index) {
 		return pleyers.get(index);
 	}
 
@@ -697,7 +722,7 @@ public class GameData {
 	 * 
 	 * @return 現在登録されているキャラの数
 	 */
-	public static int getCharaNum() {
+	public int getCharaNum() {
 		return registeredCharactors.size();
 	}
 
