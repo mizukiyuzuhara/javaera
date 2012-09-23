@@ -14,7 +14,7 @@ import com.eramaker.javaera.common.GameData;
  * @author Mizuki Yuzuhara
  * @version
  */
-public abstract class AbstructTraining {
+public abstract class AbstractTraining {
 
 	/**
 	 * 調教番号。
@@ -129,7 +129,7 @@ public abstract class AbstructTraining {
 	 * @param gameData 調教コマンドとして必要なデータ一式
 	 * @throws EndTrainingException 調教を終了させるとき
 	 */
-	public void measureEffect(GameData gameData) throws EndTrainingException {
+	public void execute(GameData gameData) throws EndTrainingException {
 		ArrayList<Integer> targetList = gameData.getTargets();
 		ArrayList<Integer> pleyerList = gameData.getPleyers();
 		for (Integer integer : targetList) {

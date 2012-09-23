@@ -6,14 +6,14 @@ package com.eramaker.javaera.training;
 
 import java.util.ArrayList;
 
-import com.eramaker.javaera.common.Charactor;
+import com.eramaker.javaera.common.Character;
 import com.eramaker.javaera.common.GameData;
 
 /**
  * @author Mizuki Yuzuhara
  * @version 
  */
-public class Com999_ExitTraining extends AbstructTraining {
+public class Com999_ExitTraining extends AbstractTraining {
 
 	public Com999_ExitTraining(){
 		id = 999;
@@ -25,7 +25,7 @@ public class Com999_ExitTraining extends AbstructTraining {
 	 * @see com.eramaker.javaera.training.AbstructTraining#measureEffectOfTarget(com.eramaker.javaera.common.Charactor, java.util.ArrayList)
 	 */
 	@Override
-	protected Charactor measureEffectOfTarget(Charactor target,
+	protected Character measureEffectOfTarget(Character target,
 			ArrayList<Integer> pleyers) {
 		return null;
 	}
@@ -34,7 +34,7 @@ public class Com999_ExitTraining extends AbstructTraining {
 	 * @see com.eramaker.javaera.training.AbstructTraining#measureEffectOfPleyer(com.eramaker.javaera.common.Charactor, int)
 	 */
 	@Override
-	protected Charactor measureEffectOfPleyer(Charactor pleyer,
+	protected Character measureEffectOfPleyer(Character pleyer,
 			int countOfTargets) {
 		return null;
 	}
@@ -52,8 +52,8 @@ public class Com999_ExitTraining extends AbstructTraining {
 	 * @see com.eramaker.javaera.training.AbstructTraining#measureEffect(com.eramaker.javaera.common.GameData)
 	 */
 	@Override
-	public void measureEffect(GameData gameData) throws EndTrainingException{
-		throw new EndTrainingException();
+	public void execute(GameData gameData) throws EndTrainingException{
+		throw new EndTrainingException("（調教を終了します。）");
 	}
 
 }

@@ -84,7 +84,7 @@ public class GameData implements Serializable {
 	 * Charactor型を持つので、<b>デフォルトを維持する必要はない</b>し、<b>想定もしていない</b><br>
 	 * これも<b>#get(0)を返す関数を持たない</b>
 	 */
-	private TreeMap<Integer, Charactor> charactors;
+	private TreeMap<Integer, Character> characters;
 	/**
 	 * 購入可能なキャラを制御する<br>
 	 * eramakerではアイテムの売買で制御しているっぽいが、敢えて分けている
@@ -320,18 +320,18 @@ public class GameData implements Serializable {
 	 * 
 	 * @return charactors
 	 */
-	public TreeMap<Integer, Charactor> getCharactors() {
-		return charactors;
+	public TreeMap<Integer, Character> getCharactors() {
+		return characters;
 	}
 
 	/**
 	 * charactorsを設定する
 	 * 
-	 * @param charactors
+	 * @param characters
 	 *            charactorsの設定値
 	 */
-	public void setCharactors(TreeMap<Integer, Charactor> charactors) {
-		this.charactors = charactors;
+	public void setCharactors(TreeMap<Integer, Character> characters) {
+		this.characters = characters;
 	}
 
 	/**

@@ -15,4 +15,19 @@ public class EndTrainingException extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 
+	 */
+	public EndTrainingException() {
+		super();
+	}
+
+	/**
+	 * @param message
+	 */
+	public EndTrainingException(String message) {
+		super(message);
+	}
+
+	
 }

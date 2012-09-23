@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Mizuki Yuzuhara
  * @version 0.1.20120916
  */
-public class Charactor {
+public class Character {
 
 	/**
 	 * キャラ番号<br>
@@ -571,11 +571,11 @@ public class Charactor {
 	 * コンストラクター<br>
 	 * これはもしかしたらprivateにするかもしれない
 	 */
-	public Charactor() {
+	public Character() {
 		super();
 	}
 
-	private Charactor(String fileName) {
+	private Character(String fileName) {
 		try {
 			ArrayList<ArrayList<String>> cells = CSVDecomposer
 					.decompose(fileName);
@@ -667,8 +667,8 @@ public class Charactor {
 	 *            キャラデータの元となるCSVのファイル名
 	 * @return 展開したキャラデータ
 	 */
-	public static Charactor createCharactor(String fileName) {
-		return new Charactor(fileName);
+	public static Character createCharactor(String fileName) {
+		return new Character(fileName);
 	}
 
 }
