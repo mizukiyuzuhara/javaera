@@ -318,9 +318,9 @@ public class GameData implements Serializable {
 	/**
 	 * charactorsを取得する
 	 * 
-	 * @return charactors
+	 * @return characters
 	 */
-	public TreeMap<Integer, Character> getCharactors() {
+	public TreeMap<Integer, Character> getCharacters() {
 		return characters;
 	}
 
@@ -328,9 +328,9 @@ public class GameData implements Serializable {
 	 * charactorsを設定する
 	 * 
 	 * @param characters
-	 *            charactorsの設定値
+	 *            charactersの設定値
 	 */
-	public void setCharactors(TreeMap<Integer, Character> characters) {
+	public void setCharacters(TreeMap<Integer, Character> characters) {
 		this.characters = characters;
 	}
 
@@ -726,4 +726,7 @@ public class GameData implements Serializable {
 		return registeredCharactors.size();
 	}
 
+	public Character registeredIdToCharacter(Integer registeredId){
+		return characters.get(registeredCharactors.get(registeredId));
+	}
 }

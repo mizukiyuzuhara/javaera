@@ -133,13 +133,13 @@ public abstract class AbstructTraining {
 		ArrayList<Integer> targetList = gameData.getTargets();
 		ArrayList<Integer> pleyerList = gameData.getPleyers();
 		for (Integer integer : targetList) {
-			Character target = gameData.getCharactors().get(integer);
-			gameData.getCharactors().put(integer,
+			Character target = gameData.getCharacters().get(integer);
+			gameData.getCharacters().put(integer,
 					measureEffectOfTarget(target, pleyerList));
 		}
 		for (Integer integer : pleyerList) {
-			Character pleyer = gameData.getCharactors().get(integer);
-			gameData.getCharactors().put(integer,
+			Character pleyer = gameData.getCharacters().get(integer);
+			gameData.getCharacters().put(integer,
 					measureEffectOfPleyer(pleyer, targetList.size()));
 		}
 		// ここで体力等の判定を行い、調教終了なら例外を返す

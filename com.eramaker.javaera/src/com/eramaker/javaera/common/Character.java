@@ -84,41 +84,20 @@ public class Character {
 	 */
 	private TreeSet<Integer> equip;
 	/**
-	 * キャラのつけているアイテムのうち調教中に着脱するもの<br>
-	 * 本来はここで管理すべきではないのだろうが、Trainingクラスで管理すると多人数プレイに対応できないのでここで扱う<br>
-	 * ただ、Charactorクラス全体が<b>セーブの対象</b>なので、調教の最後に全部クリアすることが望ましい
-	 */
-	private TreeSet<Integer> equipOnTrain;
-	/**
-	 * キャラの調教中パラメータ<br>
-	 * 当然、調教の最後に全部クリアすることが望ましい
-	 */
-	private TreeMap<Integer, Integer> paramOnTrain;
-	/**
 	 * 調教により発生した「汚れ」<br>
 	 * <b>ビット演算</b>なので扱いには注意すること
 	 */
 	private TreeMap<Integer, Integer> stain;
 	/**
-	 * この調教の間に何回絶頂に達したか<br>
-	 * しつこいようだが、調教の最後に全部クリアすることが望ましい
+	 * 調教により変動する項目。
+	 * 調教の開始時にリセットすること。
 	 */
-	private TreeMap<Integer, Integer> extOnTrain;
+	private CharacterOnTrain charactorOnTrain = new CharacterOnTrain();
 	/**
-	 * コマンドを実行することによって発生した調教ソース<br>
-	 * コマンド実行後に都度リセットすること
+	 * 調教コマンドにより変動する項目。
+	 * 調教コマンドの実行終了後にリセットすること。
 	 */
-	private TreeMap<Integer, Integer> sourceOnCommand;
-	/**
-	 * コマンドの間に何回絶頂に達したか<br>
-	 * 同じくコマンド実行後に都度リセットすること
-	 */
-	private TreeMap<Integer, Integer> extOnCommand;
-	/**
-	 * 調教を終えて獲得した珠<br>
-	 * 調教後にリセットすることが望ましい
-	 */
-	private TreeMap<Integer, Integer> jewelOnTrain;
+	private CharacterOnCommand charactorOnCommand = new CharacterOnCommand();
 	/**
 	 * 「key」が「このキャラ」をどう呼ぶか<br>
 	 * 「key」はキャラ番号<br>
@@ -414,44 +393,6 @@ public class Character {
 	}
 
 	/**
-	 * equipOnTrainを取得する
-	 * 
-	 * @return equipOnTrain
-	 */
-	public TreeSet<Integer> getEquipOnTrain() {
-		return equipOnTrain;
-	}
-
-	/**
-	 * equipOnTrainを設定する
-	 * 
-	 * @param equipOnTrain
-	 *            equipOnTrainの設定値
-	 */
-	public void setEquipOnTrain(TreeSet<Integer> equipOnTrain) {
-		this.equipOnTrain = equipOnTrain;
-	}
-
-	/**
-	 * paramOnTrainを取得する
-	 * 
-	 * @return paramOnTrain
-	 */
-	public TreeMap<Integer, Integer> getParamOnTrain() {
-		return paramOnTrain;
-	}
-
-	/**
-	 * paramOnTrainを設定する
-	 * 
-	 * @param paramOnTrain
-	 *            paramOnTrainの設定値
-	 */
-	public void setParamOnTrain(TreeMap<Integer, Integer> paramOnTrain) {
-		this.paramOnTrain = paramOnTrain;
-	}
-
-	/**
 	 * stainを取得する
 	 * 
 	 * @return stain
@@ -468,82 +409,6 @@ public class Character {
 	 */
 	public void setStain(TreeMap<Integer, Integer> stain) {
 		this.stain = stain;
-	}
-
-	/**
-	 * extOnTrainを取得する
-	 * 
-	 * @return extOnTrain
-	 */
-	public TreeMap<Integer, Integer> getExtOnTrain() {
-		return extOnTrain;
-	}
-
-	/**
-	 * extOnTrainを設定する
-	 * 
-	 * @param extOnTrain
-	 *            extOnTrainの設定値
-	 */
-	public void setExtOnTrain(TreeMap<Integer, Integer> extOnTrain) {
-		this.extOnTrain = extOnTrain;
-	}
-
-	/**
-	 * sourceOnCommandを取得する
-	 * 
-	 * @return sourceOnCommand
-	 */
-	public TreeMap<Integer, Integer> getSourceOnCommand() {
-		return sourceOnCommand;
-	}
-
-	/**
-	 * sourceOnCommandを設定する
-	 * 
-	 * @param sourceOnCommand
-	 *            sourceOnCommandの設定値
-	 */
-	public void setSourceOnCommand(TreeMap<Integer, Integer> sourceOnCommand) {
-		this.sourceOnCommand = sourceOnCommand;
-	}
-
-	/**
-	 * extOnCommandを取得する
-	 * 
-	 * @return extOnCommand
-	 */
-	public TreeMap<Integer, Integer> getExtOnCommand() {
-		return extOnCommand;
-	}
-
-	/**
-	 * extOnCommandを設定する
-	 * 
-	 * @param extOnCommand
-	 *            extOnCommandの設定値
-	 */
-	public void setExtOnCommand(TreeMap<Integer, Integer> extOnCommand) {
-		this.extOnCommand = extOnCommand;
-	}
-
-	/**
-	 * jewelOnTrainを取得する
-	 * 
-	 * @return jewelOnTrain
-	 */
-	public TreeMap<Integer, Integer> getJewelOnTrain() {
-		return jewelOnTrain;
-	}
-
-	/**
-	 * jewelOnTrainを設定する
-	 * 
-	 * @param jewelOnTrain
-	 *            jewelOnTrainの設定値
-	 */
-	public void setJewelOnTrain(TreeMap<Integer, Integer> jewelOnTrain) {
-		this.jewelOnTrain = jewelOnTrain;
 	}
 
 	/**
@@ -566,6 +431,38 @@ public class Character {
 	}
 
 	// constructor
+
+	/**
+	 * charactorOnTrainを取得する
+	 * @return charactorOnTrain
+	 */
+	public CharacterOnTrain getCharactorOnTrain() {
+		return charactorOnTrain;
+	}
+
+	/**
+	 * charactorOnTrainを設定する
+	 * @param charactorOnTrain charactorOnTrainの設定値
+	 */
+	public void setCharactorOnTrain(CharacterOnTrain charactorOnTrain) {
+		this.charactorOnTrain = charactorOnTrain;
+	}
+
+	/**
+	 * charactorOnCommandを取得する
+	 * @return charactorOnCommand
+	 */
+	public CharacterOnCommand getCharactorOnCommand() {
+		return charactorOnCommand;
+	}
+
+	/**
+	 * charactorOnCommandを設定する
+	 * @param charactorOnCommand charactorOnCommandの設定値
+	 */
+	public void setCharactorOnCommand(CharacterOnCommand charactorOnCommand) {
+		this.charactorOnCommand = charactorOnCommand;
+	}
 
 	/**
 	 * コンストラクター<br>

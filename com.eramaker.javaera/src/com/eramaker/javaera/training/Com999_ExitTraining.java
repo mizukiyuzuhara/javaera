@@ -52,8 +52,8 @@ public class Com999_ExitTraining extends AbstractTraining {
 	 * @see com.eramaker.javaera.training.AbstructTraining#measureEffect(com.eramaker.javaera.common.GameData)
 	 */
 	@Override
-	public void execute(GameData gameData) throws EndTrainingException{
-		throw new EndTrainingException("（調教を終了します。）");
+	public GameData execute(GameData gameData) throws EndTrainingException{
+		throw new EndTrainingException();
 	}
 
 }

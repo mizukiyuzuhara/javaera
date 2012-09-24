@@ -129,20 +129,21 @@ public abstract class AbstractTraining {
 	 * @param gameData 調教コマンドとして必要なデータ一式
 	 * @throws EndTrainingException 調教を終了させるとき
 	 */
-	public void execute(GameData gameData) throws EndTrainingException {
+	public GameData execute(GameData gameData) throws EndTrainingException {
 		ArrayList<Integer> targetList = gameData.getTargets();
 		ArrayList<Integer> pleyerList = gameData.getPleyers();
+		GameData data = gameData;
 		for (Integer integer : targetList) {
-			Character target = gameData.getCharactors().get(integer);
-			gameData.getCharactors().put(integer,
+			Character target = data.getCharacters().get(integer);
+			data.getCharacters().put(integer,
 					measureEffectOfTarget(target, pleyerList));
 		}
 		for (Integer integer : pleyerList) {
-			Character pleyer = gameData.getCharactors().get(integer);
-			gameData.getCharactors().put(integer,
+			Character pleyer = data.getCharacters().get(integer);
+			data.getCharacters().put(integer,
 					measureEffectOfPleyer(pleyer, targetList.size()));
 		}
-		// ここで体力等の判定を行い、調教終了なら例外を返す
+		return data;
 	}
 
 }
