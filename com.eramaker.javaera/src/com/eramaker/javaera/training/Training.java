@@ -5,6 +5,7 @@
 package com.eramaker.javaera.training;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.TreeMap;
 
 import com.eramaker.javaera.common.GameData;
 import com.eramaker.javaera.common.IOControl;
+import com.eramaker.javaera.training.command.AbstractTraining;
+import com.eramaker.javaera.training.command.Com999_ExitTraining;
 
 /**
  * @author Mizuki Yuzuhara
@@ -170,11 +173,12 @@ public class Training {
 
 	// other functions
 
-	public static GameData execute(GameData gameData) {
-		GameData data = gameData;
+	public static TrainingData execute(TrainingData gameData) {
+		TrainingData data = gameData;
 		boolean loop = true;
 		while (loop) {
 			// 選択可能なコマンド番号とコマンド名のリストを出力する
+			showCommandList();
 			// コマンド番号の入力を受けてコマンドを実行する
 			try {
 				int i = IOControl.readInteger();
@@ -193,17 +197,70 @@ public class Training {
 			}
 		}
 		// パラメータを珠に変換する
-		// 調教専用の項目をクリアする
-		for (Integer master : data.getMasters()) {
-			data.registeredIdToCharacter(master).getCharactorOnTrain().clear();
-		}
-		for (Integer target : data.getTargets()) {
-			data.registeredIdToCharacter(target).getCharactorOnTrain().clear();
-		}
-		for (Integer assistant : data.getAssistants()) {
-			data.registeredIdToCharacter(assistant).getCharactorOnTrain().clear();
-		}
 		return data;
+	}
+
+	/**
+	 * コマンドリストを出力する。
+	 */
+	private static void showCommandList() {
+		// setCommandList();
+		List<String> list = new ArrayList<String>();
+		list.addAll(setCommandList(false));
+		list.addAll(setCommandList(true));
+		IOControl.writeLines(list);
+	}
+
+	/**
+	 * コマンドリストを出力するのにコマンドがシステムコマンドか否かで同じ処理を2度するので、その1回分を行う。
+	 * 
+	 * @param isSystem
+	 *            システムコマンドか否かのフラグ
+	 * @return 整形済みのリスト
+	 */
+	private static List<String> setCommandList(boolean isSystem) {
+		StringBuffer string = new StringBuffer();
+		List<String> list = new ArrayList<String>();
+		int count = 0;
+		for (Integer trainId : trainings.keySet()) {
+			AbstractTraining abstractTraining = trainings.get(trainId);
+			if (abstractTraining.isShownTailOfList() == isSystem) {
+				StringBuilder builder = new StringBuilder();
+				// まず詰め物をする
+				for (int i = 0; i < 18 - abstractTraining.getName().length(); i++) {
+					builder.append(" ");
+				}
+				builder.append(abstractTraining.getName());
+				switch (Integer.toString(abstractTraining.getId()).length()) {
+				case 1:
+					builder.append("[  ");
+					break;
+				case 2:
+					builder.append("[ ");
+					break;
+				default:
+					builder.append("[");
+					break;
+				}
+				builder.append(Integer.toString(abstractTraining.getId()) + "]");
+				string.append(builder);
+				count++;
+				switch (count % 3) {
+				case 0:
+					list.add(new String(string));
+					string = string.delete(0, string.length());
+					break;
+				default:
+					string.append("  ");
+					break;
+				}
+			}
+		}
+		// ループの最後に残り物をlistへ移す
+		if (string.length() > 0) {
+			list.add(new String(string));
+		}
+		return list;
 	}
 
 }

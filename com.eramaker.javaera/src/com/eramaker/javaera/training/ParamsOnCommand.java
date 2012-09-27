@@ -1,9 +1,9 @@
 /**
  * CharacterOnCommand.java written by Mizuki Yuzuhara, 2012.
  * 調教コマンドにより変動する項目を管理するクラス。
- * コマンド実行後に都度リセットすること。
+ * Characterクラスから切り離されているので、データの受け渡しには注意すること。
  */
-package com.eramaker.javaera.common;
+package com.eramaker.javaera.training;
 
 import java.util.TreeMap;
 
@@ -11,7 +11,8 @@ import java.util.TreeMap;
  * @author Mizuki Yuzuhara
  * @version 0.1.20120923
  */
-public class CharacterOnCommand {
+public class ParamsOnCommand {
+
 	/**
 	 * コマンドを実行することによって発生した調教ソース。
 	 */
@@ -34,7 +35,7 @@ public class CharacterOnCommand {
 	private TreeMap<Integer, Integer> deleteParameter;
 
 	// getter and setter
-	
+
 	/**
 	 * sourceを取得する
 	 * 
@@ -72,9 +73,10 @@ public class CharacterOnCommand {
 	public void setExt(TreeMap<Integer, Integer> ext) {
 		this.ext = ext;
 	}
-	
+
 	/**
 	 * loseBaseを取得する
+	 * 
 	 * @return loseBase
 	 */
 	public TreeMap<Integer, Integer> getLoseBase() {
@@ -83,7 +85,9 @@ public class CharacterOnCommand {
 
 	/**
 	 * loseBaseを設定する
-	 * @param loseBase loseBaseの設定値
+	 * 
+	 * @param loseBase
+	 *            loseBaseの設定値
 	 */
 	public void setLoseBase(TreeMap<Integer, Integer> loseBase) {
 		this.loseBase = loseBase;
@@ -91,6 +95,7 @@ public class CharacterOnCommand {
 
 	/**
 	 * addParameterを取得する
+	 * 
 	 * @return addParameter
 	 */
 	public TreeMap<Integer, Integer> getAddParameter() {
@@ -99,7 +104,9 @@ public class CharacterOnCommand {
 
 	/**
 	 * addParameterを設定する
-	 * @param addParameter addParameterの設定値
+	 * 
+	 * @param addParameter
+	 *            addParameterの設定値
 	 */
 	public void setAddParameter(TreeMap<Integer, Integer> addParameter) {
 		this.addParameter = addParameter;
@@ -107,6 +114,7 @@ public class CharacterOnCommand {
 
 	/**
 	 * deleteParameterを取得する
+	 * 
 	 * @return deleteParameter
 	 */
 	public TreeMap<Integer, Integer> getDeleteParameter() {
@@ -115,25 +123,12 @@ public class CharacterOnCommand {
 
 	/**
 	 * deleteParameterを設定する
-	 * @param deleteParameter deleteParameterの設定値
+	 * 
+	 * @param deleteParameter
+	 *            deleteParameterの設定値
 	 */
 	public void setDeleteParameter(TreeMap<Integer, Integer> deleteParameter) {
 		this.deleteParameter = deleteParameter;
 	}
 
-	// other functions
-
-	/**
-	 * すべての項目をリセットする。
-	 * コマンド終了後、CharactorOnTrainに展開したら即実行すること。
-	 * これを残すと、CharacterOnCommandがCharacterにフィールドを有しているため、セーブデータに余計なデータが残る。
-	 */
-	public void clear(){
-		source.clear();
-		ext.clear();
-		loseBase.clear();
-		addParameter.clear();
-		deleteParameter.clear();
-	}
-	
 }

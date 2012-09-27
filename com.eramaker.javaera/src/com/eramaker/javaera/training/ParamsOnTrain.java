@@ -1,9 +1,9 @@
 /**
  * CharacterOnTrain.java written by Mizuki Yuzuhara, 2012
  * 調教中に変動する項目を管理するクラス。
- * Charactorクラス全体が<b>セーブの対象</b>なので、調教の最後に全部クリアすることが望ましい。
+ * Characterクラスから切り離されているので、データの受け渡しには注意すること。
  */
-package com.eramaker.javaera.common;
+package com.eramaker.javaera.training;
 
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -12,7 +12,8 @@ import java.util.TreeSet;
  * @author  Mizuki Yuzuhara
  * @version  0.1.20120923
  */
-public class CharacterOnTrain {
+public class ParamsOnTrain {
+	
 	/**
 	 * キャラのつけているアイテムのうち調教中に着脱するもの。
 	 * 本来はここで管理すべきではないのだろうが、Trainingクラスで管理すると多人数プレイに対応できないのでここで扱う。
@@ -88,18 +89,6 @@ public class CharacterOnTrain {
 	 */
 	public void setJewel(TreeMap<Integer, Integer> jewel) {
 		this.jewel = jewel;
-	}
-
-	// other functions
-	/**
-	 * すべての項目をリセットする。
-	 * 調教終了後に必ずリセットすること。
-	 */
-	public void clear(){
-		equip.clear();
-		param.clear();
-		ext.clear();
-		jewel.clear();
 	}
 	
 }

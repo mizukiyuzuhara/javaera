@@ -2,7 +2,7 @@
  * Charactor.java written by Mizuki Yuzuhara, 2012
  * キャラデータを扱うクラス
  */
-package com.eramaker.javaera.common;
+package com.eramaker.javaera.character;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -10,6 +10,11 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+
+import com.eramaker.javaera.common.CSVDecomposer;
+import com.eramaker.javaera.common.ElementsNotFoundException;
+import com.eramaker.javaera.common.GameDictionaries;
 
 /**
  * @author Mizuki Yuzuhara
@@ -88,16 +93,6 @@ public class Character {
 	 * <b>ビット演算</b>なので扱いには注意すること
 	 */
 	private TreeMap<Integer, Integer> stain;
-	/**
-	 * 調教により変動する項目。
-	 * 調教の開始時にリセットすること。
-	 */
-	private CharacterOnTrain charactorOnTrain = new CharacterOnTrain();
-	/**
-	 * 調教コマンドにより変動する項目。
-	 * 調教コマンドの実行終了後にリセットすること。
-	 */
-	private CharacterOnCommand charactorOnCommand = new CharacterOnCommand();
 	/**
 	 * 「key」が「このキャラ」をどう呼ぶか<br>
 	 * 「key」はキャラ番号<br>
@@ -433,38 +428,6 @@ public class Character {
 	// constructor
 
 	/**
-	 * charactorOnTrainを取得する
-	 * @return charactorOnTrain
-	 */
-	public CharacterOnTrain getCharactorOnTrain() {
-		return charactorOnTrain;
-	}
-
-	/**
-	 * charactorOnTrainを設定する
-	 * @param charactorOnTrain charactorOnTrainの設定値
-	 */
-	public void setCharactorOnTrain(CharacterOnTrain charactorOnTrain) {
-		this.charactorOnTrain = charactorOnTrain;
-	}
-
-	/**
-	 * charactorOnCommandを取得する
-	 * @return charactorOnCommand
-	 */
-	public CharacterOnCommand getCharactorOnCommand() {
-		return charactorOnCommand;
-	}
-
-	/**
-	 * charactorOnCommandを設定する
-	 * @param charactorOnCommand charactorOnCommandの設定値
-	 */
-	public void setCharactorOnCommand(CharacterOnCommand charactorOnCommand) {
-		this.charactorOnCommand = charactorOnCommand;
-	}
-
-	/**
 	 * コンストラクター<br>
 	 * これはもしかしたらprivateにするかもしれない
 	 */
@@ -476,79 +439,73 @@ public class Character {
 		try {
 			ArrayList<ArrayList<String>> cells = CSVDecomposer
 					.decompose(fileName);
-			try {
-				for (ArrayList<String> lines : cells) {
-					if (lines.get(0).equals("番号")) {
-						setId(Integer.parseInt(lines.get(1)));
-					} else if (lines.get(0).equals("名前")) {
-						setName(lines.get(1));
-					} else if (lines.get(0).equals("呼び名")) {
-						setCallName(lines.get(1));
-					} else if (lines.get(0).equals("基礎")) {
-						base.put(Integer.parseInt(lines.get(1)),
-								Integer.parseInt(lines.get(2)));
-						maxBase.put(Integer.parseInt(lines.get(1)),
-								Integer.parseInt(lines.get(2)));
-					} else if (lines.get(0).equals("能力")) {
-						if (StringUtils.isNumeric(lines.get(1))) {
-							ability.put(Integer.parseInt(lines.get(1)),
-									Integer.parseInt(lines.get(2)));
-						} else {
-							try {
-								ability.put(GameDictionaries.abilities
-										.getKey(lines.get(1)), Integer
-										.parseInt(lines.get(2)));
-							} catch (ElementsNotFoundException e) {
-								e.printStackTrace();
-							}
+			for (ArrayList<String> lines : cells) {
+				if (lines.get(0).equals("番号")) {
+					setId(NumberUtils.toInt(lines.get(1)));
+				} else if (lines.get(0).equals("名前")) {
+					setName(lines.get(1));
+				} else if (lines.get(0).equals("呼び名")) {
+					setCallName(lines.get(1));
+				} else if (lines.get(0).equals("基礎")) {
+					base.put(NumberUtils.toInt(lines.get(1)),
+							NumberUtils.toInt(lines.get(2)));
+					maxBase.put(NumberUtils.toInt(lines.get(1)),
+							NumberUtils.toInt(lines.get(2)));
+				} else if (lines.get(0).equals("能力")) {
+					if (StringUtils.isNumeric(lines.get(1))) {
+						ability.put(NumberUtils.toInt(lines.get(1)),
+								NumberUtils.toInt(lines.get(2)));
+					} else {
+						try {
+							ability.put(GameDictionaries.abilities.getKey(lines
+									.get(1)), NumberUtils.toInt(lines.get(2)));
+						} catch (ElementsNotFoundException e) {
+							e.printStackTrace();
 						}
-					} else if (lines.get(0).equals("素質")) {
-						if (StringUtils.isNumeric(lines.get(1))) {
-							talent.add(Integer.parseInt(lines.get(1)));
-						} else {
-							try {
-								talent.add(GameDictionaries.talents
-										.getKey(lines.get(1)));
-							} catch (ElementsNotFoundException e) {
-								e.printStackTrace();
-							}
-						}
-					} else if (lines.get(0).equals("経験")) {
-						if (StringUtils.isNumeric(lines.get(1))) {
-							exp.put(Integer.parseInt(lines.get(1)),
-									Integer.parseInt(lines.get(2)));
-						} else {
-							try {
-								exp.put(GameDictionaries.exps.getKey(lines
-										.get(1)),
-										Integer.parseInt(lines.get(2)));
-							} catch (ElementsNotFoundException e) {
-								e.printStackTrace();
-							}
-						}
-					} else if (lines.get(0).equals("相性")) {
-						relation.put(Integer.parseInt(lines.get(1)),
-								Integer.parseInt(lines.get(2)));
-					} else if (lines.get(0).equals("助手")) {
-						switch (Integer.parseInt(lines.get(1))) {
-						case 1:
-							setAssistable(true);
-							break;
-
-						default:
-							setAssistable(false);
-							break;
-						}
-					} else if (lines.get(0).equals("フラグ")) {
-						flag.put(Integer.parseInt(lines.get(1)),
-								Integer.parseInt(lines.get(2)));
-					} else if (lines.get(0).equals("呼称")) {
-						appellation.put(Integer.parseInt(lines.get(1)),
-								lines.get(2));
 					}
+				} else if (lines.get(0).equals("素質")) {
+					if (StringUtils.isNumeric(lines.get(1))) {
+						talent.add(NumberUtils.toInt(lines.get(1)));
+					} else {
+						try {
+							talent.add(GameDictionaries.talents.getKey(lines
+									.get(1)));
+						} catch (ElementsNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				} else if (lines.get(0).equals("経験")) {
+					if (StringUtils.isNumeric(lines.get(1))) {
+						exp.put(NumberUtils.toInt(lines.get(1)),
+								NumberUtils.toInt(lines.get(2)));
+					} else {
+						try {
+							exp.put(GameDictionaries.exps.getKey(lines.get(1)),
+									Integer.parseInt(lines.get(2)));
+						} catch (ElementsNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				} else if (lines.get(0).equals("相性")) {
+					relation.put(NumberUtils.toInt(lines.get(1)),
+							NumberUtils.toInt(lines.get(2)));
+				} else if (lines.get(0).equals("助手")) {
+					switch (NumberUtils.toInt(lines.get(1))) {
+					case 1:
+						setAssistable(true);
+						break;
+
+					default:
+						setAssistable(false);
+						break;
+					}
+				} else if (lines.get(0).equals("フラグ")) {
+					flag.put(NumberUtils.toInt(lines.get(1)),
+							NumberUtils.toInt(lines.get(2)));
+				} else if (lines.get(0).equals("呼称")) {
+					appellation.put(NumberUtils.toInt(lines.get(1)),
+							lines.get(2));
 				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

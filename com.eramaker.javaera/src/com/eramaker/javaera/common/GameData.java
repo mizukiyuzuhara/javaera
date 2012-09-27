@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import com.eramaker.javaera.character.Character;
+
 /**
  * @author Mizuki Yuzuhara
  * @version 0.1.20120914
@@ -44,47 +46,41 @@ public class GameData implements Serializable {
 	 * 曜日を求める必要があるときは、これの#get(0)を7で割って余りを曜日に当てはめると早いかも<br>
 	 * コレクション化しているので、カレンダー制御することも可能、だと思う
 	 */
-	private ArrayList<Integer> days;
+	private ElementCollection days;
 	/**
 	 * 時間を制御する<br>
 	 * 意味があるかどうかはわからないが、一応コレクション化
 	 */
-	private ArrayList<Integer> times;
+	private ElementCollection times;
 	/**
 	 * 資金を制御する
 	 */
-	private ArrayList<Integer> moneys;
+	private ElementCollection moneys;
 	/**
 	 * 主人公のキャラの<b>登録番号</b>を制御する<br>
 	 * 通常1人しかいないとは思うが、一応コレクション化
 	 */
-	private ArrayList<Integer> masters;
+	private ElementCollection masters;
 	/**
 	 * 調教中のキャラの<b>登録番号</b>を制御する<br>
 	 * 通常1人だろうが、3P、4P、…をやりたいときのことを考えて、コレクション化
 	 */
-	private ArrayList<Integer> targets;
+	private ElementCollection targets;
 	/**
 	 * 助手のキャラの<b>登録番号</b>を制御する<br>
 	 * 通常1人だろうが、（ｒｙコレクション化
 	 */
-	private ArrayList<Integer> assistants;
+	private ElementCollection assistants;
 	/**
 	 * 調教している人間のキャラの<b>登録番号</b>を制御する<br>
 	 * 正直誰得なのだが、コレクション化しておく
 	 */
-	private ArrayList<Integer> pleyers;
+	private ElementCollection pleyers;
 	/**
-	 * キャラの<b>登録番号そのものを</b>を制御する<br>
+	 * キャラと<b>登録番号そのものを</b>を制御する<br>
 	 * このArrayListは<b>#get(0)を返す関数を持たない</b>ので注意
 	 */
-	private ArrayList<Integer> registeredCharactors;
-	/**
-	 * <b>キャラそのものを</b>制御する<br>
-	 * Charactor型を持つので、<b>デフォルトを維持する必要はない</b>し、<b>想定もしていない</b><br>
-	 * これも<b>#get(0)を返す関数を持たない</b>
-	 */
-	private TreeMap<Integer, Character> characters;
+	private ArrayList<Character> registeredCharactors;
 	/**
 	 * 購入可能なキャラを制御する<br>
 	 * eramakerではアイテムの売買で制御しているっぽいが、敢えて分けている
@@ -168,7 +164,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return days
 	 */
-	public ArrayList<Integer> getDays() {
+	public ElementCollection getDays() {
 		return days;
 	}
 
@@ -178,7 +174,7 @@ public class GameData implements Serializable {
 	 * @param days
 	 *            daysの設定値
 	 */
-	public void setDays(ArrayList<Integer> days) {
+	public void setDays(ElementCollection days) {
 		this.days = days;
 	}
 
@@ -187,7 +183,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return times
 	 */
-	public ArrayList<Integer> getTimes() {
+	public ElementCollection getTimes() {
 		return times;
 	}
 
@@ -197,7 +193,7 @@ public class GameData implements Serializable {
 	 * @param times
 	 *            timesの設定値
 	 */
-	public void setTimes(ArrayList<Integer> times) {
+	public void setTimes(ElementCollection times) {
 		this.times = times;
 	}
 
@@ -206,7 +202,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return moneys
 	 */
-	public ArrayList<Integer> getMoneys() {
+	public ElementCollection getMoneys() {
 		return moneys;
 	}
 
@@ -216,7 +212,7 @@ public class GameData implements Serializable {
 	 * @param moneys
 	 *            moneysの設定値
 	 */
-	public void setMoneys(ArrayList<Integer> moneys) {
+	public void setMoneys(ElementCollection moneys) {
 		this.moneys = moneys;
 	}
 
@@ -225,7 +221,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return masters
 	 */
-	public ArrayList<Integer> getMasters() {
+	public ElementCollection getMasters() {
 		return masters;
 	}
 
@@ -235,7 +231,7 @@ public class GameData implements Serializable {
 	 * @param masters
 	 *            mastersの設定値
 	 */
-	public void setMasters(ArrayList<Integer> masters) {
+	public void setMasters(ElementCollection masters) {
 		this.masters = masters;
 	}
 
@@ -244,7 +240,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return targets
 	 */
-	public ArrayList<Integer> getTargets() {
+	public ElementCollection getTargets() {
 		return targets;
 	}
 
@@ -254,7 +250,7 @@ public class GameData implements Serializable {
 	 * @param targets
 	 *            targetsの設定値
 	 */
-	public void setTargets(ArrayList<Integer> targets) {
+	public void setTargets(ElementCollection targets) {
 		this.targets = targets;
 	}
 
@@ -263,7 +259,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return assistants
 	 */
-	public ArrayList<Integer> getAssistants() {
+	public ElementCollection getAssistants() {
 		return assistants;
 	}
 
@@ -273,7 +269,7 @@ public class GameData implements Serializable {
 	 * @param assistants
 	 *            assistantsの設定値
 	 */
-	public void setAssistants(ArrayList<Integer> assistants) {
+	public void setAssistants(ElementCollection assistants) {
 		this.assistants = assistants;
 	}
 
@@ -282,7 +278,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return pleyers
 	 */
-	public ArrayList<Integer> getPleyers() {
+	public ElementCollection getPleyers() {
 		return pleyers;
 	}
 
@@ -292,7 +288,7 @@ public class GameData implements Serializable {
 	 * @param pleyers
 	 *            pleyersの設定値
 	 */
-	public void setPleyers(ArrayList<Integer> pleyers) {
+	public void setPleyers(ElementCollection pleyers) {
 		this.pleyers = pleyers;
 	}
 
@@ -301,7 +297,7 @@ public class GameData implements Serializable {
 	 * 
 	 * @return registeredCharactors
 	 */
-	public ArrayList<Integer> getRegisteredCharactors() {
+	public ArrayList<Character> getRegisteredCharactors() {
 		return registeredCharactors;
 	}
 
@@ -311,27 +307,9 @@ public class GameData implements Serializable {
 	 * @param registeredCharactors
 	 *            registeredCharactorsの設定値
 	 */
-	public void setRegisteredCharactors(ArrayList<Integer> registeredCharactors) {
+	public void setRegisteredCharactors(
+			ArrayList<Character> registeredCharactors) {
 		this.registeredCharactors = registeredCharactors;
-	}
-
-	/**
-	 * charactorsを取得する
-	 * 
-	 * @return characters
-	 */
-	public TreeMap<Integer, Character> getCharacters() {
-		return characters;
-	}
-
-	/**
-	 * charactorsを設定する
-	 * 
-	 * @param characters
-	 *            charactersの設定値
-	 */
-	public void setCharacters(TreeMap<Integer, Character> characters) {
-		this.characters = characters;
 	}
 
 	/**
@@ -411,130 +389,6 @@ public class GameData implements Serializable {
 	}
 
 	// other functions
-	/**
-	 * 日付を配列として使用しない場合、日付を設定する
-	 * 
-	 * @param day
-	 *            日付（days#get(0)）
-	 */
-	public void setDay(Integer day) {
-		setDay(0, day);
-	}
-
-	/**
-	 * 日付を設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param day
-	 *            日付
-	 */
-	public void setDay(int index, Integer day) {
-		days.set(index, day);
-	}
-
-	/**
-	 * 日付を配列として使用しない場合、日付を取得する
-	 * 
-	 * @return 日付（days#get(0)）
-	 */
-	public Integer getDay() {
-		return getDay(0);
-	}
-
-	/**
-	 * 日付を取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 日付
-	 */
-	public Integer getDay(Integer index) {
-		return days.get(index);
-	}
-
-	/**
-	 * 時間を配列として使用しない場合、時間を設定する
-	 * 
-	 * @param time
-	 *            時間（times#get(0)）
-	 */
-	public void setTime(Integer time) {
-		setTime(0, time);
-	}
-
-	/**
-	 * 時間を設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param time
-	 *            時間
-	 */
-	public void setTime(int index, Integer time) {
-		times.set(index, time);
-	}
-
-	/**
-	 * 時間を配列として使用しない場合、時間を取得する
-	 * 
-	 * @return 時間（times#get(0)）
-	 */
-	public Integer getTime() {
-		return getTime(0);
-	}
-
-	/**
-	 * 時間を取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 時間
-	 */
-	public Integer getTime(int index) {
-		return times.get(index);
-	}
-
-	/**
-	 * 所持金を配列として使用しない場合、所持金を設定する
-	 * 
-	 * @param money
-	 */
-	public void setMoney(Integer money) {
-		setMoney(0, money);
-	}
-
-	/**
-	 * 所持金を設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param money
-	 *            所持金
-	 */
-	public void setMoney(int index, Integer money) {
-		moneys.set(index, money);
-	}
-
-	/**
-	 * 所持金を配列として使用しない場合、所持金を取得する
-	 * 
-	 * @return 所持金
-	 */
-	public Integer getMoney() {
-		return getMoney(0);
-	}
-
-	/**
-	 * 所持金を取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 所持金
-	 */
-	public Integer getMoney(int index) {
-		return moneys.get(index);
-	}
 
 	/**
 	 * 所持金のスタックが複数あるとき、その総合計を取得する
@@ -550,174 +404,6 @@ public class GameData implements Serializable {
 	}
 
 	/**
-	 * 主人公を配列として使用しない場合、主人公を設定する
-	 * 
-	 * @param master
-	 *            主人公（master#get(0)）
-	 */
-	public void setMaster(Integer master) {
-		setMaster(0, master);
-	}
-
-	/**
-	 * 主人公を設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param master
-	 *            主人公
-	 */
-	public void setMaster(int index, Integer master) {
-		masters.set(index, master);
-	}
-
-	/**
-	 * 主人公を配列として使用しない場合、主人公を取得する
-	 * 
-	 * @return 主人公
-	 */
-	public Integer getMaster() {
-		return getMaster(0);
-	}
-
-	/**
-	 * 主人公を取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 主人公
-	 */
-	public Integer getMaster(int index) {
-		return masters.get(index);
-	}
-
-	/**
-	 * 調教中のキャラを配列として使用しない場合、調教中のキャラを設定する
-	 * 
-	 * @param target
-	 *            調教中のキャラ
-	 */
-	public void setTarget(Integer target) {
-		setTarget(0, target);
-	}
-
-	/**
-	 * 調教中のキャラを設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param target
-	 *            調教中のキャラ
-	 */
-	public void setTarget(int index, Integer target) {
-		targets.set(index, target);
-	}
-
-	/**
-	 * 調教中のキャラを配列として使用しない場合、調教中のキャラを取得する
-	 * 
-	 * @return 調教中のキャラ
-	 */
-	public Integer getTarget() {
-		return getTarget(0);
-	}
-
-	/**
-	 * 調教中のキャラを取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 調教中のキャラ
-	 */
-	public Integer getTarget(int index) {
-		return targets.get(index);
-	}
-
-	/**
-	 * 助手を配列として使用しない場合、助手を設定する
-	 * 
-	 * @param assistant
-	 *            助手
-	 */
-	public void setAssistant(Integer assistant) {
-		setAssistant(0, assistant);
-	}
-
-	/**
-	 * 助手を設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param assistant
-	 *            助手
-	 */
-	public void setAssistant(int index, Integer assistant) {
-		assistants.set(index, assistant);
-	}
-
-	/**
-	 * 助手を配列として使用しない場合、助手を取得する
-	 * 
-	 * @return 助手
-	 */
-	public Integer getAssistant() {
-		return getAssistant(0);
-	}
-
-	/**
-	 * 助手を取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 助手
-	 */
-	public Integer getAssistant(int index) {
-		return assistants.get(index);
-	}
-
-	/**
-	 * 調教している人間を配列として使用しない場合、調教している人間を設定する
-	 * 
-	 * @param player
-	 *            調教している人間
-	 */
-	public void setPleyer(Integer player) {
-		setPleyer(0, player);
-	}
-
-	/**
-	 * 調教している人間を設定する
-	 * 
-	 * @param index
-	 *            項番
-	 * @param player
-	 *            調教している人間
-	 */
-	public void setPleyer(int index, Integer player) {
-		pleyers.set(index, player);
-	}
-
-	/**
-	 * 調教している人間を配列として使用しない場合、調教している人間を取得する
-	 * 
-	 * @return 調教している人間
-	 */
-	public Integer getPleyer() {
-		return getPleyer(0);
-	}
-
-	/**
-	 * 調教している人間を取得する
-	 * 
-	 * @param index
-	 *            項番
-	 * @return 調教している人間
-	 */
-	public Integer getPleyer(int index) {
-		return pleyers.get(index);
-	}
-
-	/**
 	 * 現在登録されているキャラの数を返す
 	 * 
 	 * @return 現在登録されているキャラの数
@@ -726,7 +412,4 @@ public class GameData implements Serializable {
 		return registeredCharactors.size();
 	}
 
-	public Character registeredIdToCharacter(Integer registeredId){
-		return characters.get(registeredCharactors.get(registeredId));
-	}
 }

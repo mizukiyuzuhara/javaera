@@ -3,18 +3,22 @@
  * 調教内容の仮想オブジェクト。
  * 調教内容により、overrideすること。
  */
-package com.eramaker.javaera.training;
+package com.eramaker.javaera.training.command;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
-import com.eramaker.javaera.common.Character;
-import com.eramaker.javaera.common.GameData;
+import com.eramaker.javaera.character.Character;
+import com.eramaker.javaera.training.EndTrainingException;
+import com.eramaker.javaera.training.ParamsOnCommand;
+import com.eramaker.javaera.training.TrainingData;
 
 /**
  * @author Mizuki Yuzuhara
  * @version
  */
-public abstract class AbstructTraining {
+public abstract class AbstractTraining {
 
 	/**
 	 * 調教番号。
@@ -28,6 +32,10 @@ public abstract class AbstructTraining {
 	 * この調教を選択できるか否か。 falseの場合表示から外される。
 	 */
 	protected boolean selectable;
+	/**
+	 * システムコマンドか否か。 trueの場合システムコマンドとしてコマンドリストの最後に表示。
+	 */
+	protected boolean shownTailOfList;
 
 	// getter and setter
 
@@ -88,6 +96,25 @@ public abstract class AbstructTraining {
 		this.selectable = selectable;
 	}
 
+	/**
+	 * shownTailOfListを取得する
+	 * 
+	 * @return shownTailOfList
+	 */
+	public boolean isShownTailOfList() {
+		return shownTailOfList;
+	}
+
+	/**
+	 * shownTailOfListを設定する
+	 * 
+	 * @param shownTailOfList
+	 *            shownTailOfListの設定値
+	 */
+	public void setShownTailOfList(boolean shownTailOfList) {
+		this.shownTailOfList = shownTailOfList;
+	}
+
 	// other functions
 
 	/**
@@ -98,10 +125,10 @@ public abstract class AbstructTraining {
 	 *            調教されるキャラ
 	 * @param pleyers
 	 *            調教するキャラ（いるだけ）
-	 * @return 調教結果を反映した調教されるキャラそのもの
+	 * @return 調教結果
 	 */
-	abstract protected Character measureEffectOfTarget(Character target,
-			ArrayList<Integer> pleyers);
+	abstract protected ParamsOnCommand measureEffectOfTarget(
+			Character target, ArrayList<Integer> pleyers);
 
 	/**
 	 * 調教コマンドにより調教するキャラが受ける影響を計算し、調教するキャラを返す。 調教するキャラはされるキャラの<b>人数に</b>影響を受ける。
@@ -111,9 +138,9 @@ public abstract class AbstructTraining {
 	 *            調教するキャラ
 	 * @param countOfTargets
 	 *            調教されるキャラの人数（換算値）
-	 * @return 調教結果を反映した調教するキャラそのもの
+	 * @return 調教結果
 	 */
-	abstract protected Character measureEffectOfPleyer(Character pleyer,
+	abstract protected ParamsOnCommand measureEffectOfPleyer(Character pleyer,
 			int countOfTargets);
 
 	/**
@@ -126,23 +153,34 @@ public abstract class AbstructTraining {
 
 	/**
 	 * 調教コマンドを実行する。
-	 * @param gameData 調教コマンドとして必要なデータ一式
-	 * @throws EndTrainingException 調教を終了させるとき
+	 * 
+	 * @param gameData
+	 *            調教コマンドとして必要なデータ一式
+	 * @throws EndTrainingException
+	 *             調教を終了させるとき
 	 */
-	public void measureEffect(GameData gameData) throws EndTrainingException {
+	public TrainingData execute(TrainingData gameData)
+			throws EndTrainingException {
 		ArrayList<Integer> targetList = gameData.getTargets();
 		ArrayList<Integer> pleyerList = gameData.getPleyers();
+		TrainingData data = gameData;
+		Map<Integer, ParamsOnCommand> commandMap = new TreeMap<Integer, ParamsOnCommand>();
 		for (Integer integer : targetList) {
-			Character target = gameData.getCharacters().get(integer);
-			gameData.getCharacters().put(integer,
-					measureEffectOfTarget(target, pleyerList));
+			Character target = data.registeredIdToCharacter(integer);
+			ParamsOnCommand onCommand =measureEffectOfTarget(target, pleyerList);
+			// ターゲットに同一キャラは重複しない
+			commandMap.put(integer, onCommand);
 		}
 		for (Integer integer : pleyerList) {
-			Character pleyer = gameData.getCharacters().get(integer);
-			gameData.getCharacters().put(integer,
-					measureEffectOfPleyer(pleyer, targetList.size()));
+			// Character pleyer = data.getCharacters().get(integer);
+			Character pleyer = data.registeredIdToCharacter(integer);
+			ParamsOnCommand onCommand = measureEffectOfPleyer(pleyer, targetList.size());
+			// ターゲットとプレーヤーは重複するかもしれないが、とりあえず考えない
+			commandMap.put(integer, onCommand);
 		}
-		// ここで体力等の判定を行い、調教終了なら例外を返す
+		// コマンドの結果を調教全体の結果に落とし込む
+		// TODO under construction
+		return data;
 	}
 
 }
