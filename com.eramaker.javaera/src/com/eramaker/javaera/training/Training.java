@@ -11,10 +11,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.eramaker.javaera.common.GameData;
+import com.eramaker.javaera.common.EraMain;
 import com.eramaker.javaera.common.IOControl;
+import com.eramaker.javaera.common.IllegalInputException;
 import com.eramaker.javaera.training.command.AbstractTraining;
-import com.eramaker.javaera.training.command.Com999_ExitTraining;
 
 /**
  * @author Mizuki Yuzuhara
@@ -39,10 +39,6 @@ public class Training {
 	public static final int EJACULATION = 10000;
 
 	/**
-	 * 調教コマンドのリスト。 実際には、入力された番号に相当する調教クラスが呼び出されて実行される。
-	 */
-	private static TreeMap<Integer, AbstractTraining> trainings;
-	/**
 	 * 選択されたコマンド。
 	 */
 	private int selectedCommand;
@@ -62,25 +58,6 @@ public class Training {
 	private static TreeMap<Integer, Integer> flag;
 
 	// getter and setter
-
-	/**
-	 * trainingsを取得する
-	 * 
-	 * @return trainings
-	 */
-	public static TreeMap<Integer, AbstractTraining> getTrainings() {
-		return trainings;
-	}
-
-	/**
-	 * trainingsを設定する
-	 * 
-	 * @param trainings
-	 *            trainingsの設定値
-	 */
-	public static void setTrainings(TreeMap<Integer, AbstractTraining> trainings) {
-		Training.trainings = trainings;
-	}
 
 	/**
 	 * selectedCommandを取得する
@@ -160,18 +137,7 @@ public class Training {
 		Training.flag = flag;
 	}
 
-	// constructor
-
-	/**
-	 * コンストラクタ。 調教コマンドクラスをここですべて作成してリストに入れること。
-	 */
-	public Training() {
-		// ここに、コマンド番号、コマンドクラスの順に指定してコマンドリストに入れる。
-		// 入れ方は下記を参照のこと。
-		trainings.put(999, new Com999_ExitTraining());
-	}
-
-	// other functions
+	// other mothods
 
 	public static TrainingData execute(TrainingData gameData) {
 		TrainingData data = gameData;
@@ -181,16 +147,15 @@ public class Training {
 			showCommandList();
 			// コマンド番号の入力を受けてコマンドを実行する
 			try {
-				int i = IOControl.readInteger();
-				AbstractTraining abstractTraining = trainings.get(i);
-				if (abstractTraining == null) {
-					IOControl.writeLine("コマンドが正しくありません。もう一度入力してください。");
-				} else {
-					data = abstractTraining.execute(data);
-					// ここで体力等の判定を行い、調教終了なら例外を返す
-				}
+				Integer i = IOControl.readInteger();
+				AbstractTraining abstractTraining = EraMain.trainingList
+						.getTraining(i);
+				data = abstractTraining.execute(data);
+				// ここで体力等の判定を行い、調教終了なら例外を返す
 			} catch (IOException e) {
 				IOControl.writeLine("入力が正常に行われていません。もう一度やり直してください。");
+			} catch (IllegalInputException e) {
+				IOControl.writeLine("コマンドが正しくありません。もう一度入力してください。");
 			} catch (EndTrainingException e) {
 				IOControl.writeLine("（調教を終了します。）");
 				loop = false;
@@ -222,41 +187,49 @@ public class Training {
 		StringBuffer string = new StringBuffer();
 		List<String> list = new ArrayList<String>();
 		int count = 0;
-		for (Integer trainId : trainings.keySet()) {
-			AbstractTraining abstractTraining = trainings.get(trainId);
-			if (abstractTraining.isShownTailOfList() == isSystem) {
-				StringBuilder builder = new StringBuilder();
-				// まず詰め物をする
-				for (int i = 0; i < 18 - abstractTraining.getName().length(); i++) {
-					builder.append(" ");
+		for (Integer trainId : EraMain.trainingList.keySet()) {
+			AbstractTraining abstractTraining;
+			try {
+				abstractTraining = EraMain.trainingList.getTraining(trainId);
+				if (abstractTraining.isSelectable()
+						&& abstractTraining.isShownTailOfList() == isSystem) {
+					StringBuilder builder = new StringBuilder();
+					// まず詰め物をする
+					for (int i = 0; i < 18 - abstractTraining.getName()
+							.length(); i++) {
+						builder.append(" ");
+					}
+					builder.append(abstractTraining.getName());
+					switch (Integer.toString(abstractTraining.getId()).length()) {
+					case 1:
+						builder.append("[  ");
+						break;
+					case 2:
+						builder.append("[ ");
+						break;
+					default:
+						builder.append("[");
+						break;
+					}
+					builder.append(Integer.toString(abstractTraining.getId())
+							+ "]");
+					string.append(builder);
+					count++;
+					switch (count % 3) {
+					case 0:
+						list.add(new String(string));
+						string = string.delete(0, string.length());
+						break;
+					default:
+						string.append("  ");
+						break;
+					}
 				}
-				builder.append(abstractTraining.getName());
-				switch (Integer.toString(abstractTraining.getId()).length()) {
-				case 1:
-					builder.append("[  ");
-					break;
-				case 2:
-					builder.append("[ ");
-					break;
-				default:
-					builder.append("[");
-					break;
-				}
-				builder.append(Integer.toString(abstractTraining.getId()) + "]");
-				string.append(builder);
-				count++;
-				switch (count % 3) {
-				case 0:
-					list.add(new String(string));
-					string = string.delete(0, string.length());
-					break;
-				default:
-					string.append("  ");
-					break;
-				}
+			} catch (IllegalInputException e) {
+				e.printStackTrace(); // 該当するコマンドが存在するはずなので、ここには飛んでこない
 			}
-		}
-		// ループの最後に残り物をlistへ移す
+		} // for loop
+			// ループの最後に残り物をlistへ移す
 		if (string.length() > 0) {
 			list.add(new String(string));
 		}

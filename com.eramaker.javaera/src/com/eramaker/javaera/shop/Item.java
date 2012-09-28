@@ -3,13 +3,13 @@
  * ゲーム上のアイテムをオブジェクト化したもの。
  * item.csvよりも情報量が多いので、CSVの書式を変更するか、プロパティか何かで読み込むことを推奨
  */
-package com.eramaker.javaera.common;
+package com.eramaker.javaera.shop;
 
 /**
  * @author Mizuki Yuzuhara
  * @version 0.1.20120921
  */
-public class GameItem {
+public class Item {
 
 	/**
 	 * アイテム番号。
@@ -115,7 +115,7 @@ public class GameItem {
 	 * @param name
 	 * @param price
 	 */
-	public GameItem(int id, String name, int price) {
+	public Item(int id, String name, int price) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
@@ -129,7 +129,7 @@ public class GameItem {
 	 * @param price
 	 * @param consumable
 	 */
-	public GameItem(int id, String name, int price, boolean consumable) {
+	public Item(int id, String name, int price, boolean consumable) {
 		this.id = id;
 		this.name = name;
 		this.price = price;

@@ -4,9 +4,6 @@
  */
 package com.eramaker.javaera.common;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.TreeMap;
 
 /**
  * @author Mizuki Yuzuhara
@@ -18,71 +15,55 @@ public class GameDictionaries {
 	/**
 	 * 調教中パラメータの辞書
 	 */
-	public static Dictionary parameters;
+	public Dictionary parameters;
 	/**
 	 * 能力の辞書
 	 */
-	public static Dictionary abilities;
+	public Dictionary abilities;
 	/**
 	 * 素質の辞書
 	 */
-	public static Dictionary talents;
+	public Dictionary talents;
 	/**
 	 * 刻印の辞書
 	 */
-	public static Dictionary marks;
+	public Dictionary marks;
 	/**
 	 * 経験の辞書
 	 */
-	public static Dictionary exps;
-	/**
-	 * 調教コマンドの辞書
-	 */
-	public static Dictionary trainings;
-	/**
-	 * アイテムの辞書.
-	 */
-	public static TreeMap<Integer, GameItem> items;
+	public Dictionary exps;
 	/**
 	 * ゲーム中で使う色々な文章の辞書<br>
 	 * あまり使っていないような気もするが、そこはそれ
 	 */
-	public static Dictionary stringses;
+	public Dictionary stringses;
 
 	// Constants
 
 	/**
 	 * 調教中パラメータの辞書の中身
 	 */
-	static final String FILENAME_PARAM = "csv/Palam.csv";
+	final String FILENAME_PARAM = "csv/Palam.csv";
 	/**
 	 * 能力の辞書の中身
 	 */
-	static final String FILENAME_ABL = "csv/Abl.csv";
+	final String FILENAME_ABL = "csv/Abl.csv";
 	/**
 	 * 素質の辞書の中身
 	 */
-	static final String FILENAME_TALENT = "csv/Talent.csv";
+	final String FILENAME_TALENT = "csv/Talent.csv";
 	/**
 	 * 刻印の辞書の中身
 	 */
-	static final String FILENAME_MARK = "csv/Mark.csv";
+	final String FILENAME_MARK = "csv/Mark.csv";
 	/**
 	 * 経験の辞書の中身
 	 */
-	static final String FILENAME_EXP = "csv/Exp.csv";
-	/**
-	 * 調教コマンドの辞書の中身
-	 */
-	static final String FILENAME_TRAIN = "csv/Train.csv";
-	/**
-	 * アイテムの辞書＆価格表の中身
-	 */
-	static final String FILENAME_ITEM = "csv/Item.csv";
+	final String FILENAME_EXP = "csv/Exp.csv";
 	/**
 	 * 文章の辞書の中身
 	 */
-	static final String FILENAME_STR = "csv/Str.csv";
+	final String FILENAME_STR = "csv/Str.csv";
 
 	// getter and setter
 
@@ -91,7 +72,7 @@ public class GameDictionaries {
 	 * 
 	 * @return parameters
 	 */
-	public static Dictionary getParameters() {
+	public Dictionary getParameters() {
 		return parameters;
 	}
 
@@ -101,8 +82,8 @@ public class GameDictionaries {
 	 * @param parameters
 	 *            parametersの設定値
 	 */
-	public static void setParameters(Dictionary parameters) {
-		GameDictionaries.parameters = parameters;
+	public void setParameters(Dictionary parameters) {
+		this.parameters = parameters;
 	}
 
 	/**
@@ -110,7 +91,7 @@ public class GameDictionaries {
 	 * 
 	 * @return abilities
 	 */
-	public static Dictionary getAbilities() {
+	public Dictionary getAbilities() {
 		return abilities;
 	}
 
@@ -120,8 +101,8 @@ public class GameDictionaries {
 	 * @param abilities
 	 *            abilitiesの設定値
 	 */
-	public static void setAbilities(Dictionary abilities) {
-		GameDictionaries.abilities = abilities;
+	public void setAbilities(Dictionary abilities) {
+		this.abilities = abilities;
 	}
 
 	/**
@@ -129,7 +110,7 @@ public class GameDictionaries {
 	 * 
 	 * @return talents
 	 */
-	public static Dictionary getTalents() {
+	public Dictionary getTalents() {
 		return talents;
 	}
 
@@ -139,8 +120,8 @@ public class GameDictionaries {
 	 * @param talents
 	 *            talentsの設定値
 	 */
-	public static void setTalents(Dictionary talents) {
-		GameDictionaries.talents = talents;
+	public void setTalents(Dictionary talents) {
+		this.talents = talents;
 	}
 
 	/**
@@ -148,7 +129,7 @@ public class GameDictionaries {
 	 * 
 	 * @return marks
 	 */
-	public static Dictionary getMarks() {
+	public Dictionary getMarks() {
 		return marks;
 	}
 
@@ -158,8 +139,8 @@ public class GameDictionaries {
 	 * @param marks
 	 *            marksの設定値
 	 */
-	public static void setMarks(Dictionary marks) {
-		GameDictionaries.marks = marks;
+	public void setMarks(Dictionary marks) {
+		this.marks = marks;
 	}
 
 	/**
@@ -167,7 +148,7 @@ public class GameDictionaries {
 	 * 
 	 * @return exps
 	 */
-	public static Dictionary getExps() {
+	public Dictionary getExps() {
 		return exps;
 	}
 
@@ -177,43 +158,8 @@ public class GameDictionaries {
 	 * @param exps
 	 *            expsの設定値
 	 */
-	public static void setExps(Dictionary exps) {
-		GameDictionaries.exps = exps;
-	}
-
-	/**
-	 * trainingsを取得する
-	 * 
-	 * @return trainings
-	 */
-	public static Dictionary getTrainings() {
-		return trainings;
-	}
-
-	/**
-	 * trainingsを設定する
-	 * 
-	 * @param trainings
-	 *            trainingsの設定値
-	 */
-	public static void setTrainings(Dictionary trainings) {
-		GameDictionaries.trainings = trainings;
-	}
-
-	/**
-	 * itemsを取得する
-	 * @return items
-	 */
-	public static TreeMap<Integer, GameItem> getItems() {
-		return items;
-	}
-
-	/**
-	 * itemsを設定する
-	 * @param items itemsの設定値
-	 */
-	public static void setItems(TreeMap<Integer, GameItem> items) {
-		GameDictionaries.items = items;
+	public void setExps(Dictionary exps) {
+		this.exps = exps;
 	}
 
 	/**
@@ -221,7 +167,7 @@ public class GameDictionaries {
 	 * 
 	 * @return stringses
 	 */
-	public static Dictionary getStringses() {
+	public Dictionary getStringses() {
 		return stringses;
 	}
 
@@ -231,8 +177,8 @@ public class GameDictionaries {
 	 * @param stringses
 	 *            stringsesの設定値
 	 */
-	public static void setStringses(Dictionary stringses) {
-		GameDictionaries.stringses = stringses;
+	public void setStringses(Dictionary stringses) {
+		this.stringses = stringses;
 	}
 
 	// other function
@@ -240,36 +186,13 @@ public class GameDictionaries {
 	/**
 	 * 辞書を全部まとめて初期化する
 	 */
-	public static void initialize() {
+	public void initialize() {
 		parameters.createDictionary(FILENAME_PARAM);
 		abilities.createDictionary(FILENAME_ABL);
 		talents.createDictionary(FILENAME_TALENT);
 		marks.createDictionary(FILENAME_MARK);
 		exps.createDictionary(FILENAME_EXP);
-		trainings.createDictionary(FILENAME_TRAIN);
 		stringses.createDictionary(FILENAME_STR);
-		initializeItems();
-	}
-
-	/**
-	 * アイテムを初期化する
-	 */
-	public static void initializeItems() {
-		items.clear();
-		try {
-			ArrayList<ArrayList<String>> cells = CSVDecomposer
-					.decompose(FILENAME_ITEM);
-			for (ArrayList<String> lines : cells) {
-				try {
-					GameItem item = new GameItem(Integer.parseInt(lines.get(0)), lines.get(1), Integer.parseInt(lines.get(2)));
-					items.put(item.getId(), item);
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

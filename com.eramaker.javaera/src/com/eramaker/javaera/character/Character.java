@@ -14,7 +14,7 @@ import org.apache.commons.lang.math.NumberUtils;
 
 import com.eramaker.javaera.common.CSVDecomposer;
 import com.eramaker.javaera.common.ElementsNotFoundException;
-import com.eramaker.javaera.common.GameDictionaries;
+import com.eramaker.javaera.common.EraMain;
 
 /**
  * @author Mizuki Yuzuhara
@@ -429,13 +429,15 @@ public class Character {
 
 	/**
 	 * コンストラクター<br>
-	 * これはもしかしたらprivateにするかもしれない
 	 */
 	public Character() {
 		super();
 	}
 
-	private Character(String fileName) {
+	/**
+	 * コンストラクター<br>
+	 */
+	public Character(String fileName) {
 		try {
 			ArrayList<ArrayList<String>> cells = CSVDecomposer
 					.decompose(fileName);
@@ -457,8 +459,9 @@ public class Character {
 								NumberUtils.toInt(lines.get(2)));
 					} else {
 						try {
-							ability.put(GameDictionaries.abilities.getKey(lines
-									.get(1)), NumberUtils.toInt(lines.get(2)));
+							ability.put(EraMain.dictionaries.abilities
+									.getKey(lines.get(1)), NumberUtils
+									.toInt(lines.get(2)));
 						} catch (ElementsNotFoundException e) {
 							e.printStackTrace();
 						}
@@ -468,8 +471,9 @@ public class Character {
 						talent.add(NumberUtils.toInt(lines.get(1)));
 					} else {
 						try {
-							talent.add(GameDictionaries.talents.getKey(lines
-									.get(1)));
+							// talent.add(GameDictionaries.talents.getKey(lines
+							talent.add(EraMain.dictionaries.talents
+									.getKey(lines.get(1)));
 						} catch (ElementsNotFoundException e) {
 							e.printStackTrace();
 						}
@@ -480,8 +484,9 @@ public class Character {
 								NumberUtils.toInt(lines.get(2)));
 					} else {
 						try {
-							exp.put(GameDictionaries.exps.getKey(lines.get(1)),
-									Integer.parseInt(lines.get(2)));
+							// exp.put(GameDictionaries.exps.getKey(lines.get(1)),
+							exp.put(EraMain.dictionaries.exps.getKey(lines
+									.get(1)), Integer.parseInt(lines.get(2)));
 						} catch (ElementsNotFoundException e) {
 							e.printStackTrace();
 						}
@@ -510,19 +515,6 @@ public class Character {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-
-	// other functions
-
-	/**
-	 * キャラデータを作成して返す
-	 * 
-	 * @param fileName
-	 *            キャラデータの元となるCSVのファイル名
-	 * @return 展開したキャラデータ
-	 */
-	public static Character createCharactor(String fileName) {
-		return new Character(fileName);
 	}
 
 }
