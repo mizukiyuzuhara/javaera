@@ -2,7 +2,7 @@
  * ElementsNotFoundException.java written by Mizuki Yuzuhara, 2012
  * 辞書引きしたときにnullが返ってきたときに投げる例外
  */
-package com.eramaker.javaera.common;
+package com.eramaker.javaera.dictionary;
 
 /**
  * @author Mizuki Yuzuhara

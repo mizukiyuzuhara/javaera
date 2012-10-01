@@ -13,8 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import com.eramaker.javaera.common.CSVDecomposer;
-import com.eramaker.javaera.common.ElementsNotFoundException;
-import com.eramaker.javaera.common.EraMain;
+import com.eramaker.javaera.dictionary.AbilityDic;
+import com.eramaker.javaera.dictionary.Dictionary;
+import com.eramaker.javaera.dictionary.ElementsNotFoundException;
+import com.eramaker.javaera.dictionary.ExpDic;
+import com.eramaker.javaera.dictionary.TalentDic;
 
 /**
  * @author Mizuki Yuzuhara
@@ -439,6 +442,9 @@ public class Character {
 	 */
 	public Character(String fileName) {
 		try {
+			Dictionary abilityDIc = new AbilityDic();
+			Dictionary talentDic = new TalentDic();
+			Dictionary expDic = new ExpDic();
 			ArrayList<ArrayList<String>> cells = CSVDecomposer
 					.decompose(fileName);
 			for (ArrayList<String> lines : cells) {
@@ -459,9 +465,8 @@ public class Character {
 								NumberUtils.toInt(lines.get(2)));
 					} else {
 						try {
-							ability.put(EraMain.dictionaries.abilities
-									.getKey(lines.get(1)), NumberUtils
-									.toInt(lines.get(2)));
+							ability.put(abilityDIc.getKey(lines.get(1)),
+									NumberUtils.toInt(lines.get(2)));
 						} catch (ElementsNotFoundException e) {
 							e.printStackTrace();
 						}
@@ -472,8 +477,7 @@ public class Character {
 					} else {
 						try {
 							// talent.add(GameDictionaries.talents.getKey(lines
-							talent.add(EraMain.dictionaries.talents
-									.getKey(lines.get(1)));
+							talent.add(talentDic.getKey(lines.get(1)));
 						} catch (ElementsNotFoundException e) {
 							e.printStackTrace();
 						}
@@ -485,8 +489,8 @@ public class Character {
 					} else {
 						try {
 							// exp.put(GameDictionaries.exps.getKey(lines.get(1)),
-							exp.put(EraMain.dictionaries.exps.getKey(lines
-									.get(1)), Integer.parseInt(lines.get(2)));
+							exp.put(expDic.getKey(lines.get(1)),
+									NumberUtils.toInt(lines.get(2)));
 						} catch (ElementsNotFoundException e) {
 							e.printStackTrace();
 						}

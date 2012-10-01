@@ -7,14 +7,14 @@ package com.eramaker.javaera.training;
 import java.util.TreeMap;
 
 import com.eramaker.javaera.common.IllegalInputException;
-import com.eramaker.javaera.training.command.AbstractTraining;
+import com.eramaker.javaera.training.command.AbstractTrainCommand;
 import com.eramaker.javaera.training.command.Com999_ExitTraining;
 
 /**
  * @author Mizuki Yuzuhara
  * @version 0.1.20120928
  */
-public class TrainingList extends TreeMap<Integer, AbstractTraining> {
+public class TrainingList extends TreeMap<Integer, AbstractTrainCommand> {
 
 	/**
 	 * シリアルバージョン番号。
@@ -39,9 +39,9 @@ public class TrainingList extends TreeMap<Integer, AbstractTraining> {
 	 * @return コマンド番号に対応する調教コマンド
 	 * @throws IllegalInputException コマンド番号に該当する調教コマンドがない場合
 	 */
-	public AbstractTraining getTraining(Integer integer)
+	public AbstractTrainCommand getTraining(Integer integer)
 			throws IllegalInputException {
-		AbstractTraining training = get(integer);
+		AbstractTrainCommand training = get(integer);
 		if (training == null) {
 			throw new IllegalInputException();
 		} else {

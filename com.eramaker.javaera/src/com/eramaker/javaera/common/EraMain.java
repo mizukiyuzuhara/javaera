@@ -11,9 +11,6 @@
  */
 package com.eramaker.javaera.common;
 
-import com.eramaker.javaera.character.CharacterList;
-import com.eramaker.javaera.shop.ItemList;
-import com.eramaker.javaera.training.TrainingList;
 
 /**
  * @author Mizuki Yuzuhara
@@ -22,30 +19,22 @@ import com.eramaker.javaera.training.TrainingList;
 public class EraMain {
 	
 	/**
-	 * ゲーム上で使用する辞書一式。
+	 * 基礎データ。
 	 */
-	public static GameDictionaries dictionaries;
+	public static GameBase base;
 	/**
-	 * 調教リスト。
+	 * ゲーム内のデータ。
+	 * 基本的には、必要な項目を転がしていくので、これを直接呼び出さないこと。
 	 */
-	public static TrainingList trainingList;
-	/**
-	 * アイテムリスト。
-	 */
-	public static ItemList itemList;
-	public static CharacterList characterList;
+	public static GameData gameData;
 
+	// other methods
+	
 	/**
-	 * @param args
+	 * 辞書を初期化する
 	 */
-	public static void main(String[] args) {
-		// 辞書を初期化する
-		dictionaries.initialize();
-		trainingList = new TrainingList();
-		itemList = new ItemList();
-		characterList = new CharacterList();
-		// TODO 自動生成されたメソッド・スタブ
-
+	public static void initialize() {
+		base = new GameBase();
 	}
 
 }

@@ -15,7 +15,7 @@ import com.eramaker.javaera.training.TrainingData;
  * @author Mizuki Yuzuhara
  * @version
  */
-public class Com999_ExitTraining extends AbstractTraining {
+public class Com999_ExitTraining extends AbstractTrainCommand {
 
 	public Com999_ExitTraining() {
 		id = 999;

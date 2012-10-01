@@ -18,7 +18,7 @@ import com.eramaker.javaera.training.TrainingData;
  * @author Mizuki Yuzuhara
  * @version
  */
-public abstract class AbstractTraining {
+public abstract class AbstractTrainCommand {
 
 	/**
 	 * 調教番号。

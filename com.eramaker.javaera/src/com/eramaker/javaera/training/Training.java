@@ -11,10 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.eramaker.javaera.common.EraMain;
 import com.eramaker.javaera.common.IOControl;
 import com.eramaker.javaera.common.IllegalInputException;
-import com.eramaker.javaera.training.command.AbstractTraining;
+import com.eramaker.javaera.training.command.AbstractTrainCommand;
 
 /**
  * @author Mizuki Yuzuhara
@@ -56,6 +55,10 @@ public class Training {
 	 * 調教内で用いられるフラグ。
 	 */
 	private static TreeMap<Integer, Integer> flag;
+	/**
+	 * 調教リスト。
+	 */
+	private static TrainingList trainingList = new TrainingList();
 
 	// getter and setter
 
@@ -148,9 +151,9 @@ public class Training {
 			// コマンド番号の入力を受けてコマンドを実行する
 			try {
 				Integer i = IOControl.readInteger();
-				AbstractTraining abstractTraining = EraMain.trainingList
+				AbstractTrainCommand abstractTrainCommand = trainingList
 						.getTraining(i);
-				data = abstractTraining.execute(data);
+				data = abstractTrainCommand.execute(data);
 				// ここで体力等の判定を行い、調教終了なら例外を返す
 			} catch (IOException e) {
 				IOControl.writeLine("入力が正常に行われていません。もう一度やり直してください。");
@@ -186,21 +189,24 @@ public class Training {
 	private static List<String> setCommandList(boolean isSystem) {
 		StringBuffer string = new StringBuffer();
 		List<String> list = new ArrayList<String>();
+		
 		int count = 0;
-		for (Integer trainId : EraMain.trainingList.keySet()) {
-			AbstractTraining abstractTraining;
+		for (Integer trainId : trainingList.keySet()) {
+			AbstractTrainCommand abstractTrainCommand;
 			try {
-				abstractTraining = EraMain.trainingList.getTraining(trainId);
-				if (abstractTraining.isSelectable()
-						&& abstractTraining.isShownTailOfList() == isSystem) {
+				abstractTrainCommand = trainingList
+						.getTraining(trainId);
+				if (abstractTrainCommand.isSelectable()
+						&& abstractTrainCommand.isShownTailOfList() == isSystem) {
 					StringBuilder builder = new StringBuilder();
 					// まず詰め物をする
-					for (int i = 0; i < 18 - abstractTraining.getName()
+					for (int i = 0; i < 18 - abstractTrainCommand.getName()
 							.length(); i++) {
 						builder.append(" ");
 					}
-					builder.append(abstractTraining.getName());
-					switch (Integer.toString(abstractTraining.getId()).length()) {
+					builder.append(abstractTrainCommand.getName());
+					switch (Integer.toString(abstractTrainCommand.getId())
+							.length()) {
 					case 1:
 						builder.append("[  ");
 						break;
@@ -211,8 +217,8 @@ public class Training {
 						builder.append("[");
 						break;
 					}
-					builder.append(Integer.toString(abstractTraining.getId())
-							+ "]");
+					builder.append(Integer.toString(abstractTrainCommand
+							.getId()) + "]");
 					string.append(builder);
 					count++;
 					switch (count % 3) {
